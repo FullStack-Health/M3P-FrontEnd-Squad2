@@ -190,3 +190,13 @@
 #signup-alert {
     padding-top: 1em;
 }
+
+#user-profile {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+        &:focus {
+            border: 2px solid $inputFocusBorder;
+            outline: none;
+        }
+}

@@ -37,8 +37,8 @@ export class LoginComponent {
   });
 
   signupInfo = new FormGroup({
-    userName: new FormControl('', [Validators.required, this.customValidatorService.fullName()]),
     userEmail: new FormControl('', [Validators.required, Validators.email]),
+    userProfile: new FormControl('', [Validators.required]),
     userPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
@@ -105,14 +105,14 @@ export class LoginComponent {
   };
 
   signup() {
-    if (this.signupInfo.value.userName && this.signupInfo.value.userEmail && this.signupInfo.value.userPassword && this.signupInfo.value.confirmPassword) {
+    if (this.signupInfo.value.userEmail && this.signupInfo.value.userProfile && this.signupInfo.value.userPassword && this.signupInfo.value.confirmPassword) {
       if (this.signupInfo.value.userPassword == this.signupInfo.value.confirmPassword) {
         if (this.signupInfo.valid) {
           let users = this.getStorage();
           if (users.find((user: { email: string; }) => user.email == this.signupInfo.value.userEmail)) {
             this.showSignupAlert("Já existe um cadastro com este e-mail. Caso tenha esquecido a senha, preencha seu e-mail na tela de login e clique em ’Esqueceu a senha?’", "warning");
           } else {
-            this.addUser(this.signupInfo.value.userName, this.signupInfo.value.userEmail, this.signupInfo.value.userPassword);
+            this.addUser(this.signupInfo.value.userEmail, this.signupInfo.value.userProfile, this.signupInfo.value.userPassword);
             this.showLoginAlert(`O cadastro da pessoa com o e-mail ${this.signupInfo.value.userEmail} foi realizado com sucesso!`, "success");
             this.signupInfo.reset();
             this.closeModal("Submit click");
@@ -128,10 +128,10 @@ export class LoginComponent {
     }
   };
 
-  addUser(name: string, email: string, password: string) {
+  addUser(email: string, profile: string, password: string) {
     const newUser = {
-      name: name,
       email: email,
+      profile : profile,
       password: password,
     };
     let users = this.getStorage();
