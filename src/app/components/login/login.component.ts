@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CustomValidatorService } from '../../services/custom-validator.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent {
     private customValidatorService: CustomValidatorService,
     private router: Router,
     private toastrService: ToastrService,
+    private userService: UserService,
   ) { };
 
   private modalService = inject(NgbModal);
@@ -105,27 +107,19 @@ export class LoginComponent {
   };
 
   signup() {
-    if (this.signupInfo.value.userEmail && this.signupInfo.value.userProfile && this.signupInfo.value.userPassword && this.signupInfo.value.confirmPassword) {
-      if (this.signupInfo.value.userPassword == this.signupInfo.value.confirmPassword) {
-        if (this.signupInfo.valid) {
-          let users = this.getStorage();
-          if (users.find((user: { email: string; }) => user.email == this.signupInfo.value.userEmail)) {
-            this.showSignupAlert("Já existe um cadastro com este e-mail. Caso tenha esquecido a senha, preencha seu e-mail na tela de login e clique em ’Esqueceu a senha?’", "warning");
-          } else {
-            this.addUser(this.signupInfo.value.userEmail, this.signupInfo.value.userProfile, this.signupInfo.value.userPassword);
-            this.showLoginAlert(`O cadastro da pessoa com o e-mail ${this.signupInfo.value.userEmail} foi realizado com sucesso!`, "success");
-            this.signupInfo.reset();
-            this.closeModal("Submit click");
-          };
-        } else {
-          this.showSignupAlert("Os campos não foram preenchidos adequadamente.", "danger");
-        }
-      } else {
-        this.showSignupAlert("Os campos senha e confirmar senha devem ser iguais.", "warning");
-      }
-    } else {
+    if (!this.signupInfo.value.userEmail || !this.signupInfo.value.userProfile || !this.signupInfo.value.userPassword || !this.signupInfo.value.confirmPassword) {
       this.showSignupAlert("Preencha todos os campos.", "warning");
+      return;
     }
+    if (this.signupInfo.value.userPassword != this.signupInfo.value.confirmPassword) {
+      this.showSignupAlert("Os campos senha e confirmar senha devem ser iguais.", "warning");
+      return;
+    }
+    if (!this.signupInfo.valid) {
+      this.showSignupAlert("Os campos não foram preenchidos adequadamente.", "danger");
+      return;
+    }
+    this.addUser(this.signupInfo.value.userEmail, this.signupInfo.value.userProfile, this.signupInfo.value.userPassword);
   };
 
   addUser(email: string, profile: string, password: string) {
@@ -134,9 +128,18 @@ export class LoginComponent {
       profile : profile,
       password: password,
     };
-    let users = this.getStorage();
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
+    this.userService.addQuickUser(newUser).subscribe({
+      next: (response): void => {
+        this.toastrService.success('Novo registro de pessoa usuária salvo com sucesso!', '');
+        this.showLoginAlert(`O cadastro da pessoa com o e-mail ${email} foi realizado com sucesso!`, "success");
+        this.signupInfo.reset();
+        this.closeModal("Submit click");
+      },
+      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Atualizar a mensagem abaixo para mostrar a mensagem de retorno do back-end.
+      error: (error) => {
+        this.toastrService.error('Algo deu errado ao tentar salvar o registro de pessoa usuária.', '');
+      }});
+  
   };
 
   getStorage() {
