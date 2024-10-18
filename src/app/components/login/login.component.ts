@@ -29,7 +29,7 @@ export class LoginComponent {
   private modalRef: any;
 
   alertLoginVisibility: boolean = false;
-  alertSignupVisibility: boolean = false;
+  alertModalVisibility: boolean = false;
   alertMessage: string = '';
   alertType: string = '';
 
@@ -45,6 +45,12 @@ export class LoginComponent {
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
+  forgotPasswordInfo = new FormGroup({
+    userEmail: new FormControl('', [Validators.required, Validators.email]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    confirmNewPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+  });
+
   openModal(content: TemplateRef<any>) {
     this.modalRef = this.modalService.open(content, { centered: true });
     this.alertLoginVisibility = false;
@@ -52,7 +58,7 @@ export class LoginComponent {
 
   closeModal(reason: string) {
     this.modalRef.dismiss(reason);
-    this.alertSignupVisibility = false;
+    this.alertModalVisibility = false;
   };
 
   showLoginAlert(message: string, type: string) {
@@ -71,9 +77,9 @@ export class LoginComponent {
   showSignupAlert(message: string, type: string) {
     this.alertType = type;
     this.alertMessage = message;
-    this.alertSignupVisibility = true;
+    this.alertModalVisibility = true;
     setTimeout(() => {
-      this.alertSignupVisibility = false;
+      this.alertModalVisibility = false;
     }, 15000);
   };
 
@@ -145,6 +151,19 @@ export class LoginComponent {
   };
 
   forgotPassword() {
+    if (!this.forgotPasswordInfo.value.userEmail || !this.forgotPasswordInfo.value.newPassword || !this.forgotPasswordInfo.value.confirmNewPassword) {
+      this.showSignupAlert("Preencha todos os campos.", "warning");
+      return;
+    };
+    if (this.forgotPasswordInfo.value.newPassword != this.forgotPasswordInfo.value.confirmNewPassword) {
+      this.showSignupAlert("Os campos senha e confirmar senha devem ser iguais.", "warning");
+      return;
+    };
+    if (!this.forgotPasswordInfo.valid) {
+      this.showSignupAlert("Os campos não foram preenchidos adequadamente.", "danger");
+      return;
+    };
+
     if (this.loginInfo.value.userEmail) {
       let userFound = this.checkEmail(this.loginInfo.value.userEmail);
       if (userFound) {
