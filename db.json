@@ -1,4 +1,14 @@
 {
+
+  "usuarios": [
+    {
+      "id": "1234",
+      "perfil": "ADMIN",
+      "email": "admin@mail.com",
+      "password": "12341234"
+    }
+  ],
+
   "patients": [
     {
       "name": "Neil Richard MacKinnon Gaiman",

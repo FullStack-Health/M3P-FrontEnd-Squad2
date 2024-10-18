@@ -56,31 +56,6 @@
         (click)="closeModal('Cross click')"></button>
 	</div>
 	<div class="modal-body">
-            <label for="user-name">Nome:</label>
-            <input
-            id="user-name"
-            name="user-name"
-            type="text"
-            formControlName="userName"
-            required
-            [ngClass]="{'error-border': (signupInfo.controls.userName.dirty ||
-        signupInfo.controls.userName.touched) &&
-        signupInfo.controls.userName.errors}"
-            />
-            <span class="error-message"
-            *ngIf="(signupInfo.controls.userName.dirty ||
-            signupInfo.controls.userName.touched) &&
-            signupInfo.controls.userName.errors &&
-            signupInfo.controls.userName.errors['required']"
-            >Preencha seu nome</span>
-
-            <span class="error-message"
-            *ngIf="(signupInfo.controls.userName.dirty &&
-            signupInfo.controls.userName.touched) &&
-            signupInfo.controls.userName.errors &&
-            signupInfo.controls.userName.errors['fullName']"
-            >Preencha seu nome com pelo menos um sobrenome</span>
-
             <label for="user-email">E-mail:</label>
             <input
             id="user-email"
@@ -105,6 +80,26 @@
             signupInfo.controls.userEmail.errors &&
             signupInfo.controls.userEmail.errors['email']"
             >Preencha um e-mail válido</span>
+
+            <label for="user-profile">Perfil:</label>
+            <select
+            id="user-profile"
+            name="user-profile"
+            formControlName="userProfile"
+            required
+            [ngClass]="{'error-border': (signupInfo.controls.userProfile.dirty ||
+        signupInfo.controls.userProfile.touched) &&
+        signupInfo.controls.userProfile.errors}"
+            >
+            <option value="ADMIN">Admin</option>
+            <option value="MEDICO">Pessoa médica</option>
+            </select>
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userProfile.dirty ||
+            signupInfo.controls.userProfile.touched) &&
+            signupInfo.controls.userProfile.errors &&
+            signupInfo.controls.userProfile.errors['required']"
+            >Selecione o perfil</span>
 
             <label for="user-password">Senha:</label>
             <input
