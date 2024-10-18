@@ -79,18 +79,9 @@ export class LoginComponent {
 
   login() {
     if (this.loginInfo.value.userEmail && this.loginInfo.value.userPassword) {
-      let userFound = this.checkEmail(this.loginInfo.value.userEmail);
-      if (userFound) {
-        if (userFound.password == this.loginInfo.value.userPassword) {
-          this.setLoggedUser(this.loginInfo.value.userEmail);
-          this.toastrService.success("Login efetuado com sucesso!",'');
-          this.router.navigate(["home"]);
-        } else {
-          this.showLoginAlert("Senha incorreta. Verifique se digitou corretamente.", "warning");
-        };
-      } else {
-        this.showLoginAlert("Não encontramos uma conta associada a esse e-mail. Verifique se digitou corretamente ou crie uma nova conta.", "warning")
-      };
+      this.setLoggedUser(this.loginInfo.value.userEmail);
+      this.toastrService.success("Login efetuado com sucesso!",'');
+      this.router.navigate(["home"]);
     } else {
       this.showLoginAlert("Por favor, preencha todos os campos.", "warning");
     };
