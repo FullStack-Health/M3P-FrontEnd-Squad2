@@ -147,7 +147,6 @@ export class LoginComponent {
         this.closeModal("Submit click");
       },
       error: (error) => {
-        console.log(error);
         this.toastrService.error(error.error, '');
       }
     });
