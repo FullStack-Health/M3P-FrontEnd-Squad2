@@ -17,6 +17,12 @@ export class UserService {
     return this.httpClient.post<any>(updateUrl, newUserData, { headers: headers });
   }
 
+  changePassword(email: string, newPassword: string){
+    let updateUrl = `${this.urlpath}/email/${email}/redefinir-senha`;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.put<any>(updateUrl, newPassword, { headers: headers });
+  }
+
 
  
 }

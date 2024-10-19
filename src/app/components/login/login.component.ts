@@ -132,9 +132,9 @@ export class LoginComponent {
         this.signupInfo.reset();
         this.closeModal("Submit click");
       },
-      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Atualizar a mensagem abaixo para mostrar a mensagem de retorno do back-end.
+      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
       error: (error) => {
-        this.toastrService.error('Algo deu errado ao tentar salvar o registro de pessoa usuária.', '');
+        this.toastrService.error(error.message, '');
       }});
   
   };
@@ -162,26 +162,27 @@ export class LoginComponent {
     if (!this.forgotPasswordInfo.valid) {
       this.showSignupAlert("Os campos não foram preenchidos adequadamente.", "danger");
       return;
-    };
-
-    if (this.loginInfo.value.userEmail) {
-      let userFound = this.checkEmail(this.loginInfo.value.userEmail);
-      if (userFound) {
-        let users = this.getStorage();
-        const updatedUsers = users.map((user: { email: any; }) => {
-          if (user.email === userFound.email) {
-            return { ...user, password: "novasenha" };
-          }
-          return user;
-        });
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-        this.toastrService.info("Sua senha foi alterada para a senha padrão ‘novasenha’. Faça seu login utilizando essa senha.")
-      } else {
-        this.toastrService.warning("Pessoa usuária não cadastrada.")
-      }
-    } else {
-      this.toastrService.warning("Preencha o campo e-mail.")
-    };
+    };   
+    this.changePassword(this.forgotPasswordInfo.value.userEmail, this.forgotPasswordInfo.value.newPassword);
   };
+
+  changePassword(email: string, newPassword: string) {
+    this.userService.changePassword(email, newPassword).subscribe({
+      next: (response): void => {
+        this.toastrService.success('Sua senha foi alterada com sucesso!', '');
+        this.showLoginAlert(`A senha da pessoa com o e-mail ${email} foi alterada com sucesso.`, "success");
+        this.forgotPasswordInfo.reset();
+        this.closeModal("Submit click");
+      },
+      //TO DO: (Depende do back-end, endpoint PUT /usuarios/email/{email}/redefinir-senha) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
+      error: (error) => {
+        this.toastrService.error(error.message, '');
+      }
+
+    });   
+  };
+  
+
+
 
 }
