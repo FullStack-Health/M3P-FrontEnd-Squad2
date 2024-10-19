@@ -185,7 +185,7 @@ patientInfo.controls.maritalStatus.errors}">
                 </div>
                 <div class="form-unit">
                     <label for="address-street">Logradouro:</label>
-                    <input id="address-street" name="address-street" type="text" formControlName="addressStreet"
+                    <input id="address-street" name="address-street" type="text" formControlName="addressStreet" readonly
                         [ngClass]="{'error-border': (patientInfo.controls.addressStreet.dirty || patientInfo.controls.addressStreet.touched) &&patientInfo.controls.addressStreet.errors}" />
                     <span class="error-message" *ngIf="(patientInfo.controls.addressStreet.dirty ||
   patientInfo.controls.addressStreet.touched) &&
@@ -203,11 +203,11 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="address-neighborhood">Bairro:</label>
                     <input id="address-neighborhood" name="address-neighborhood" type="text"
-                        formControlName="addressNeighborhood" />
+                        formControlName="addressNeighborhood" readonly/>
                 </div>
                 <div class="form-unit">
                     <label for="address-city">Cidade:</label>
-                    <input id="address-city" name="address-city" type="text" formControlName="addressCity"
+                    <input id="address-city" name="address-city" type="text" formControlName="addressCity" readonly
                         [ngClass]="{'error-border': (patientInfo.controls.addressCity.dirty || patientInfo.controls.addressCity.touched) &&patientInfo.controls.addressCity.errors}" />
                     <span class="error-message" *ngIf="(patientInfo.controls.addressCity.dirty ||
   patientInfo.controls.addressCity.touched) &&
@@ -216,9 +216,9 @@ patientInfo.controls.maritalStatus.errors}">
                 </div>
                 <div class="form-unit">
                     <label for="address-state">Estado:</label>
-                    <select id="address-state" name="address-state" type="text" formControlName="addressState"
-                    [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}">
-                        <option value="AC">Acre</option>
+                    <input id="address-state" name="address-state" type="text" formControlName="addressState"
+                    [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}" readonly>
+                        <!-- <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
                         <option value="AP">Amapá</option>
                         <option value="AM">Amazonas</option>
@@ -244,8 +244,8 @@ patientInfo.controls.maritalStatus.errors}">
                         <option value="SC">Santa Catarina</option>
                         <option value="SP">São Paulo</option>
                         <option value="SE">Sergipe</option>
-                        <option value="TO">Tocantins</option>
-                    </select>
+                        <option value="TO">Tocantins</option> -->
+                <!-- </input> -->
                     <!-- <input id="address-state" name="address-state" type="text" formControlName="addressState"
                         [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}" /> -->
                     <span class="error-message" *ngIf="(patientInfo.controls.addressState.dirty ||
