@@ -117,6 +117,7 @@ export class LoginComponent {
       return;
     }
     this.addUser(this.signupInfo.value.userEmail, this.signupInfo.value.userProfile, this.signupInfo.value.userPassword);
+    this.alertModalVisibility = false;
   };
 
   addUser(email: string, profile: string, password: string) {
@@ -150,7 +151,7 @@ export class LoginComponent {
     };
   };
 
-  forgotPassword() {
+  redefinePassword() {
     if (!this.forgotPasswordInfo.value.userEmail || !this.forgotPasswordInfo.value.newPassword || !this.forgotPasswordInfo.value.confirmNewPassword) {
       this.showSignupAlert("Preencha todos os campos.", "warning");
       return;
@@ -164,6 +165,7 @@ export class LoginComponent {
       return;
     };   
     this.changePassword(this.forgotPasswordInfo.value.userEmail, this.forgotPasswordInfo.value.newPassword);
+    this.alertModalVisibility = false;
   };
 
   changePassword(email: string, newPassword: string) {
