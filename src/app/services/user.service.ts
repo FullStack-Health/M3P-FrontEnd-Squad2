@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url } from '../environments/variables';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,8 @@ export class UserService {
     return this.httpClient.post<any>(updateUrl, newUserData, { headers: headers });
   }
 
+  login(user: any) {
+    return firstValueFrom(this.httpClient.post(`${url}/login`, user, { responseType: 'text' }));
+  }
 
- 
 }

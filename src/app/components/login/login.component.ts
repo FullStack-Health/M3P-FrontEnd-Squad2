@@ -79,9 +79,18 @@ export class LoginComponent {
 
   login() {
     if (this.loginInfo.value.userEmail && this.loginInfo.value.userPassword) {
-      this.setLoggedUser(this.loginInfo.value.userEmail);
-      this.toastrService.success("Login efetuado com sucesso!",'');
-      this.router.navigate(["home"]);
+      const userEmail = this.loginInfo.value.userEmail;
+      this.userService.login({
+        username: this.loginInfo.value.userEmail,
+        password: this.loginInfo.value.userPassword
+      }).then((token: any) => {
+        this.setLoggedUser(userEmail);
+        this.setTokenUser(token);
+        this.toastrService.success("Login efetuado com sucesso!", '');
+        this.router.navigate(["home"]);
+      }).catch((err) => {
+        this.toastrService.error("Login não efetuado, favor confirme os dados digitados!", '');
+      })
     } else {
       this.showLoginAlert("Por favor, preencha todos os campos.", "warning");
     };
@@ -92,9 +101,13 @@ export class LoginComponent {
     return users.find((user: { email: string | null | undefined; }) => user.email == email);
   };
 
+  setTokenUser(token: string) {
+    localStorage.setItem("access_token", token);
+  };
+
   setLoggedUser(email: string) {
-    let loggedUser = this.checkEmail(email);
-    localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
+    // let loggedUser = this.checkEmail(email);
+    localStorage.setItem("loggedUser", email);
   };
 
   signup() {
@@ -116,7 +129,7 @@ export class LoginComponent {
   addUser(email: string, profile: string, password: string) {
     const newUser = {
       email: email,
-      profile : profile,
+      profile: profile,
       password: password,
     };
     this.userService.addQuickUser(newUser).subscribe({
@@ -129,8 +142,9 @@ export class LoginComponent {
       //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Atualizar a mensagem abaixo para mostrar a mensagem de retorno do back-end.
       error: (error) => {
         this.toastrService.error('Algo deu errado ao tentar salvar o registro de pessoa usuária.', '');
-      }});
-  
+      }
+    });
+
   };
 
   getStorage() {
