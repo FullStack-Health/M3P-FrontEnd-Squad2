@@ -90,10 +90,12 @@ export class LoginComponent {
         username: this.loginInfo.value.userEmail,
         password: this.loginInfo.value.userPassword
       }).then((token: any) => {
-        this.setLoggedUser(userEmail);
         this.setTokenUser(token);
-        this.toastrService.success("Login efetuado com sucesso!", '');
-        this.router.navigate(["home"]);
+        this.userService.me().then((user) => {
+          this.setLoggedUser(user);
+          this.router.navigate(["home"]);
+          this.toastrService.success("Login efetuado com sucesso!", '');
+        });
       }).catch((err) => {
         this.toastrService.error("Login não efetuado, favor confirme os dados digitados!", '');
       })
@@ -111,9 +113,9 @@ export class LoginComponent {
     localStorage.setItem("access_token", token);
   };
 
-  setLoggedUser(email: string) {
+  setLoggedUser(user: any) {
     // let loggedUser = this.checkEmail(email);
-    localStorage.setItem("loggedUser", email);
+    localStorage.setItem("loggedUser", JSON.stringify(user));
   };
 
   signup() {

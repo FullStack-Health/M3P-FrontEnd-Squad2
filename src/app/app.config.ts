@@ -5,13 +5,14 @@ import { routes } from './app.routes';
 import { provideNgxMask } from 'ngx-mask';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { authenticationInterceptor } from './authentication.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authenticationInterceptor])),
     provideNgxMask(),
     provideToastr(),
-    provideAnimations(),
+    provideAnimations()
   ]
 };

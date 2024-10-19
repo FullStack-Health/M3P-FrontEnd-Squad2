@@ -22,7 +22,11 @@ export class UserService {
     return firstValueFrom(this.httpClient.post(`${url}/login`, user, { responseType: 'text' }));
   }
 
-  changePassword(email: string, newPassword: string){
+  me() {
+    return firstValueFrom(this.httpClient.get<any>(`${url}/usuarios/me`));
+  }
+
+  changePassword(email: string, newPassword: string) {
     let updateUrl = `${this.urlpath}/email/${email}/redefinir-senha`;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.put<any>(updateUrl, newPassword, { headers: headers });
