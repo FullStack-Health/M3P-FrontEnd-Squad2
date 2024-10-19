@@ -29,7 +29,7 @@ export class LoginComponent {
   private modalRef: any;
 
   alertLoginVisibility: boolean = false;
-  alertSignupVisibility: boolean = false;
+  alertModalVisibility: boolean = false;
   alertMessage: string = '';
   alertType: string = '';
 
@@ -45,6 +45,12 @@ export class LoginComponent {
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
+  forgotPasswordInfo = new FormGroup({
+    userEmail: new FormControl('', [Validators.required, Validators.email]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    confirmNewPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+  });
+
   openModal(content: TemplateRef<any>) {
     this.modalRef = this.modalService.open(content, { centered: true });
     this.alertLoginVisibility = false;
@@ -52,7 +58,7 @@ export class LoginComponent {
 
   closeModal(reason: string) {
     this.modalRef.dismiss(reason);
-    this.alertSignupVisibility = false;
+    this.alertModalVisibility = false;
   };
 
   showLoginAlert(message: string, type: string) {
@@ -71,9 +77,9 @@ export class LoginComponent {
   showSignupAlert(message: string, type: string) {
     this.alertType = type;
     this.alertMessage = message;
-    this.alertSignupVisibility = true;
+    this.alertModalVisibility = true;
     setTimeout(() => {
-      this.alertSignupVisibility = false;
+      this.alertModalVisibility = false;
     }, 15000);
   };
 
@@ -111,6 +117,7 @@ export class LoginComponent {
       return;
     }
     this.addUser(this.signupInfo.value.userEmail, this.signupInfo.value.userProfile, this.signupInfo.value.userPassword);
+    this.alertModalVisibility = false;
   };
 
   addUser(email: string, profile: string, password: string) {
@@ -126,9 +133,9 @@ export class LoginComponent {
         this.signupInfo.reset();
         this.closeModal("Submit click");
       },
-      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Atualizar a mensagem abaixo para mostrar a mensagem de retorno do back-end.
+      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
       error: (error) => {
-        this.toastrService.error('Algo deu errado ao tentar salvar o registro de pessoa usuária.', '');
+        this.toastrService.error(error.message, '');
       }});
   
   };
@@ -144,25 +151,40 @@ export class LoginComponent {
     };
   };
 
-  forgotPassword() {
-    if (this.loginInfo.value.userEmail) {
-      let userFound = this.checkEmail(this.loginInfo.value.userEmail);
-      if (userFound) {
-        let users = this.getStorage();
-        const updatedUsers = users.map((user: { email: any; }) => {
-          if (user.email === userFound.email) {
-            return { ...user, password: "novasenha" };
-          }
-          return user;
-        });
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-        this.toastrService.info("Sua senha foi alterada para a senha padrão ‘novasenha’. Faça seu login utilizando essa senha.")
-      } else {
-        this.toastrService.warning("Pessoa usuária não cadastrada.")
-      }
-    } else {
-      this.toastrService.warning("Preencha o campo e-mail.")
+  redefinePassword() {
+    if (!this.forgotPasswordInfo.value.userEmail || !this.forgotPasswordInfo.value.newPassword || !this.forgotPasswordInfo.value.confirmNewPassword) {
+      this.showSignupAlert("Preencha todos os campos.", "warning");
+      return;
     };
+    if (this.forgotPasswordInfo.value.newPassword != this.forgotPasswordInfo.value.confirmNewPassword) {
+      this.showSignupAlert("Os campos senha e confirmar senha devem ser iguais.", "warning");
+      return;
+    };
+    if (!this.forgotPasswordInfo.valid) {
+      this.showSignupAlert("Os campos não foram preenchidos adequadamente.", "danger");
+      return;
+    };   
+    this.changePassword(this.forgotPasswordInfo.value.userEmail, this.forgotPasswordInfo.value.newPassword);
+    this.alertModalVisibility = false;
   };
+
+  changePassword(email: string, newPassword: string) {
+    this.userService.changePassword(email, newPassword).subscribe({
+      next: (response): void => {
+        this.toastrService.success('Sua senha foi alterada com sucesso!', '');
+        this.showLoginAlert(`A senha da pessoa com o e-mail ${email} foi alterada com sucesso.`, "success");
+        this.forgotPasswordInfo.reset();
+        this.closeModal("Submit click");
+      },
+      //TO DO: (Depende do back-end, endpoint PUT /usuarios/email/{email}/redefinir-senha) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
+      error: (error) => {
+        this.toastrService.error(error.message, '');
+      }
+
+    });   
+  };
+  
+
+
 
 }
