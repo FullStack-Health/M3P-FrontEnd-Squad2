@@ -17,8 +17,9 @@ export class PatientService {
   };
 
   addPatient(newPatientData: any) {
+    let updateUrl = `http://localhost:8081/pacientes`;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post<any>(this.url, newPatientData, { headers: headers });
+    return this.httpClient.post<any>(updateUrl, newPatientData, { headers: headers });
   };
 
   editPatient(patientId: string, editedPatientData: any) {

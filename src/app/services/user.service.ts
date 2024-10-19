@@ -12,8 +12,12 @@ export class UserService {
 
   urlpath: string = `${url}/usuarios`;
 
+
+
+
+
   addQuickUser(newUserData: any) {
-    let updateUrl = `${this.urlpath}/pre-registro`;
+    let updateUrl = `${this.urlpath}`;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.post<any>(updateUrl, newUserData, { headers: headers });
   }

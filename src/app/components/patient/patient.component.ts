@@ -37,6 +37,7 @@ export class PatientComponent {
   patientToEdit: any = {};
   address: any | undefined;
   datePattern = /^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{4}$/;
+  isValid: boolean = true;
 
   patientInfo = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
@@ -49,7 +50,7 @@ export class PatientComponent {
     email: new FormControl('', [Validators.email]),
     birthCity: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
     emergencyContact: new FormControl('', [Validators.required]),
-    allergies: new FormControl(''),
+    allergies: new FormControl('', Validators.required),
     specialCare: new FormControl(''),
     insuranceCompany: new FormControl(''),
     insuranceNumber: new FormControl(''),
@@ -78,7 +79,13 @@ export class PatientComponent {
         this.editingMode = false;
       }
     });
+
+    
   };
+
+
+  
+
 
   getPatient(patientId: string) {
     this.patientService.getPatient().subscribe((patients) => {
