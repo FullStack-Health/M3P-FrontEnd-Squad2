@@ -1,17 +1,22 @@
 <div id="patient-container">
     <form id="patient-form" [formGroup]="patientInfo">
-        
+
         <div class="patient-header">
             <div>
-            <button *ngIf="editingMode == true" class="secondary-button" (click)="goBack()" title="Voltar"><fa-icon [icon]="faCircleChevronLeft"></fa-icon>Voltar</button>
+                <button *ngIf="editingMode == true" class="secondary-button" (click)="goBack()" title="Voltar"><fa-icon
+                        [icon]="faCircleChevronLeft"></fa-icon>Voltar</button>
             </div>
             <div class="header-right-side">
-            <div *ngIf="editingMode == false" class="edit-mode" id="edit-mode-off" title="Modo edição desativado">Modo edição <fa-icon [icon]="faPenToSquare"></fa-icon></div>
-            <div *ngIf="editingMode == true" class="edit-mode" id="edit-mode-on" title="Modo edição ativado">Modo edição <fa-icon [icon]="faPenToSquare"></fa-icon></div>
-            <button (click)="deletePatient()" class="danger-button" [disabled]="!editingMode" title="Deletar">Deletar</button>
-            <button *ngIf="editingMode == true" (click)="editPatient()" class="primary-button"
-                type="submit" title="Salvar modificações">Salvar</button>
-            <button *ngIf="editingMode == false" (click)="savePatient()" class="primary-button" type="submit" title="Salvar cadastro">Salvar</button>
+                <div *ngIf="editingMode == false" class="edit-mode" id="edit-mode-off" title="Modo edição desativado">
+                    Modo edição <fa-icon [icon]="faPenToSquare"></fa-icon></div>
+                <div *ngIf="editingMode == true" class="edit-mode" id="edit-mode-on" title="Modo edição ativado">Modo
+                    edição <fa-icon [icon]="faPenToSquare"></fa-icon></div>
+                <button (click)="deletePatient()" class="danger-button" [disabled]="!editingMode"
+                    title="Deletar">Deletar</button>
+                <button *ngIf="editingMode == true" (click)="editPatient()" class="primary-button" type="submit"
+                    title="Salvar modificações">Salvar</button>
+                <button *ngIf="editingMode == false" (click)="savePatient()" class="primary-button" type="submit"
+                    title="Salvar cadastro">Salvar</button>
             </div>
 
         </div>
@@ -73,7 +78,7 @@ patientInfo.controls.gender.errors}">
                 <div class="form-unit">
                     <label for="patient-cpf">CPF:</label>
                     <input id="patient-cpf" name="patient-cpf" type="text" mask="000.000.000-00" formControlName="cpf"
-                        required [ngClass]="{'error-border': (patientInfo.controls.cpf.dirty ||
+                        [dropSpecialCharacters]="false" required [ngClass]="{'error-border': (patientInfo.controls.cpf.dirty ||
                     patientInfo.controls.cpf.touched) &&
                     patientInfo.controls.cpf.errors}" />
                     <span class="error-message" *ngIf="(patientInfo.controls.cpf.dirty ||
@@ -120,7 +125,7 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="patient-phone">Telefone:</label>
                     <input id="patient-phone" name="patient-phone" type="tel" mask="(00) 0 0000-0000"
-                        formControlName="phone" required
+                        [dropSpecialCharacters]="false" formControlName="phone" required
                         [ngClass]="{'error-border': (patientInfo.controls.phone.dirty || patientInfo.controls.phone.touched) && patientInfo.controls.phone.errors}" />
                     <span class="error-message"
                         *ngIf="(patientInfo.controls.phone.dirty || patientInfo.controls.phone.touched) && patientInfo.controls.phone.errors && patientInfo.controls.phone.errors['required']">Campo
@@ -160,7 +165,8 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="patient-emergency-contact">Contato de Emergência:</label>
                     <input id="patient-emergency-contact" name="patient-emergency-contact" type="tel"
-                        mask="(00) 0 0000-0000" formControlName="emergencyContact" required
+                        [dropSpecialCharacters]="false" mask="(00) 0 0000-0000" formControlName="emergencyContact"
+                        required
                         [ngClass]="{'error-border': (patientInfo.controls.emergencyContact.dirty || patientInfo.controls.emergencyContact.touched) &&patientInfo.controls.emergencyContact.errors}" />
                     <span class="error-message" *ngIf="(patientInfo.controls.emergencyContact.dirty ||
   patientInfo.controls.emergencyContact.touched) &&
@@ -181,7 +187,8 @@ patientInfo.controls.maritalStatus.errors}">
   patientInfo.controls.cep.errors &&
   patientInfo.controls.cep.errors['required']">Campo obrigatório</span>
 
-                    <button id="cep-button" type="button" (click)="searchAddress()" title="Pesquisar CEP">Pesquisar CEP</button>
+                    <button id="cep-button" type="button" (click)="searchAddress()" title="Pesquisar CEP">Pesquisar
+                        CEP</button>
                 </div>
                 <div class="form-unit">
                     <label for="address-street">Logradouro:</label>
@@ -217,7 +224,7 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="address-state">Estado:</label>
                     <select id="address-state" name="address-state" type="text" formControlName="addressState"
-                    [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}">
+                        [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}">
                         <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
                         <option value="AP">Amapá</option>
@@ -283,7 +290,7 @@ patientInfo.controls.maritalStatus.errors}">
                         patientInfo.controls.insuranceExpiration.errors['pattern']">Utilize o formato dd/mm/aaaa</span>
                 </div>
             </section>
-                <section class="patient-section">
+            <section class="patient-section">
                 <div class="form-unit">
                     <label for="patient-allergies">Lista de Alergias:</label>
                     <textarea id="patient-allergies" name="patient-allergies" type="text"

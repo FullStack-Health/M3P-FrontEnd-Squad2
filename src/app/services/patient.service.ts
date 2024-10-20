@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { url } from '../environments/variables';
 
 @Injectable({
   providedIn: 'root'
@@ -9,26 +10,26 @@ export class PatientService {
 
   constructor(private httpClient: HttpClient) { }
 
-  url: string = '/api/patients';
+  base: string = url + '/pacientes';
 
   getPatient() {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.get<any>(this.url, {headers: headers});
+    return this.httpClient.get<any>(this.base, { headers: headers });
   };
 
   addPatient(newPatientData: any) {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post<any>(this.url, newPatientData, { headers: headers });
+    return this.httpClient.post<any>(this.base, newPatientData, { headers: headers });
   };
 
   editPatient(patientId: string, editedPatientData: any) {
-    let updateUrl = `${this.url}/${patientId}`;
+    let updateUrl = `${this.base}/${patientId}`;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.put<any>(updateUrl, editedPatientData, { headers: headers });
   };
 
   deletePatient(patientId: string) {
-    const url = `${this.url}/${patientId}`;
+    const url = `${this.base}/${patientId}`;
     return this.httpClient.delete<any>(url);
   };
 
