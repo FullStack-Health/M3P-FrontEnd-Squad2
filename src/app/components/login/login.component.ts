@@ -23,7 +23,9 @@ export class LoginComponent {
     private router: Router,
     private toastrService: ToastrService,
     private userService: UserService,
-  ) { };
+  ) {
+    localStorage.clear();
+  };
 
   private modalService = inject(NgbModal);
   private modalRef: any;
