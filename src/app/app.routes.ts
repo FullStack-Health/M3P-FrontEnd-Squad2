@@ -8,6 +8,7 @@ import { RecordsComponent } from './components/records/records.component';
 import { RecordsDetailComponent } from './components/records/records-detail/records-detail.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
+import { perfilGuard } from './guards/perfil.guard';
 
 export const routes: Routes = [
     {
@@ -33,7 +34,7 @@ export const routes: Routes = [
     {
         path: "register-consultation",
         component: ConsultationComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "register-exam",

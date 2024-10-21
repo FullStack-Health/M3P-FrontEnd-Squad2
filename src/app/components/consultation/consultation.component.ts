@@ -9,13 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleChevronLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-consultation',
   standalone: true,
   templateUrl: './consultation.component.html',
   styleUrl: './consultation.component.scss',
-  imports: [ReactiveFormsModule, CommonModule, BirthDatePipe, FontAwesomeModule]
+  imports: [ReactiveFormsModule, CommonModule, BirthDatePipe, FontAwesomeModule, NgxMaskDirective, NgxMaskPipe]
 })
 export class ConsultationComponent {
 
@@ -44,7 +45,7 @@ export class ConsultationComponent {
     time: new FormControl(formatDate(new Date(), 'HH:mm', "en"), [Validators.required]),
     issueDescription: new FormControl('', [Validators.required, Validators.minLength(16), Validators.maxLength(1024)]),
     prescribedMedication: new FormControl(''),
-    dosagePrecautions: new FormControl('', [Validators.required, Validators.minLength(16), Validators.maxLength(256)]),
+    observation: new FormControl('', [Validators.required, Validators.minLength(16), Validators.maxLength(256)]),
   });
 
   editingMode = false;
@@ -75,11 +76,11 @@ export class ConsultationComponent {
         time: this.consultationToEdit.time,
         issueDescription: this.consultationToEdit.issueDescription,
         prescribedMedication: this.consultationToEdit.prescribedMedication,
-        dosagePrecautions: this.consultationToEdit.dosagePrecautions,
+        observation: this.consultationToEdit.observation,
         });
       this.selectedPatientId = this.consultationToEdit.patientId;
       this.patientService.getPatient().subscribe((patients) => {
-        let patient
+        let patient;
         patient = patients.find((patient: { id: string; }) => patient.id == this.selectedPatientId);
         this.selectedPatientName = patient.name;
       })
@@ -90,10 +91,10 @@ export class ConsultationComponent {
     const nameOrId = this.patientInput.value.nameOrId?.trim();
     if (nameOrId) {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
+        this.patientsList = patients.content;
         this.resultsList = this.patientsList.filter((searchedPatient: { name: string, id: string }) => {
           const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(nameOrId.toLowerCase());
-          const isIdMatch = searchedPatient.id && searchedPatient.id.includes(nameOrId);
+          const isIdMatch = searchedPatient.id && searchedPatient.id.toString().includes(nameOrId);
           return isNameMatch || isIdMatch;
         });
         this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
@@ -123,7 +124,7 @@ export class ConsultationComponent {
           "time": this.consultationInfo.value.time,
           "issueDescription": this.consultationInfo.value.issueDescription,
           "prescribedMedication": this.consultationInfo.value.prescribedMedication,
-          "dosagePrecautions": this.consultationInfo.value.dosagePrecautions,
+          "observation": this.consultationInfo.value.observation,
         }
         this.consultationService.addConsultation(newConsultation).subscribe({
           next: (response): void => {
@@ -153,7 +154,7 @@ export class ConsultationComponent {
           "time": this.consultationInfo.value.time,
           "issueDescription": this.consultationInfo.value.issueDescription,
           "prescribedMedication": this.consultationInfo.value.prescribedMedication,
-          "dosagePrecautions": this.consultationInfo.value.dosagePrecautions,
+          "observation": this.consultationInfo.value.observation,
         }
         this.consultationService.editConsultation(this.consultationToEdit.id, editedConsultation).subscribe({
           next: (response): void => {
