@@ -140,7 +140,7 @@ export class LoginComponent {
   addUser(email: string, profile: string, password: string) {
     const newUser = {
       email: email,
-      profile: profile,
+      perfil: profile,
       password: password,
     };
     this.userService.addQuickUser(newUser).subscribe({
@@ -150,9 +150,8 @@ export class LoginComponent {
         this.signupInfo.reset();
         this.closeModal("Submit click");
       },
-      //TO DO: (Depende do back-end, endpoint POST /usuarios/pre-registro) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
       error: (error) => {
-        this.toastrService.error(error.message, '');
+        this.toastrService.error(error.error, '');
       }
     });
   };
@@ -195,7 +194,7 @@ export class LoginComponent {
       },
       //TO DO: (Depende do back-end, endpoint PUT /usuarios/email/{email}/redefinir-senha) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
       error: (error) => {
-        this.toastrService.error(error.message, '');
+        this.toastrService.error(error.error, '');
       }
 
     });
