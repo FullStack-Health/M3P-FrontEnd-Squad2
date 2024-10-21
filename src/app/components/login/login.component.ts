@@ -135,10 +135,10 @@ export class LoginComponent {
     this.alertModalVisibility = false;
   };
 
-  addUser(email: string, profile: string, password: string) {
+  addUser(email: string, perfil: string, password: string) {
     const newUser = {
       email: email,
-      profile: profile,
+      perfil: perfil,
       password: password,
     };
     this.userService.addQuickUser(newUser).subscribe({
