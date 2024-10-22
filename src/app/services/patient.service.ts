@@ -12,9 +12,15 @@ export class PatientService {
 
   base: string = url + '/pacientes';
 
+
+  // getPatientPronturario() {
+  //   let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  //   return this.httpClient.get<any>(`${this.base}/prontuarios`, { headers: headers });
+  // };
+  
   getPatient() {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.get<any>(this.base, { headers: headers });
+    return this.httpClient.get<any>(`${this.base}/prontuarios`, { headers: headers });
   };
 
   addPatient(newPatientData: any) {
