@@ -140,7 +140,7 @@ export class LoginComponent {
   addUser(email: string, perfil: string, password: string) {
     const newUser = {
       email: email,
-      perfil: profile,
+      perfil: perfil,
       password: password,
     };
     this.userService.addQuickUser(newUser).subscribe({
