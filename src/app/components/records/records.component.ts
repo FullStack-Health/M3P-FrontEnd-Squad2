@@ -48,7 +48,7 @@ export class RecordsComponent {
         this.patientsList = patients.content;
         this.resultsList = this.patientsList.filter((searchedPatient: { name: string, id: string }) => {
           const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(nameOrId.toLowerCase());
-          const isIdMatch = searchedPatient.id && searchedPatient.id.includes(nameOrId);
+          const isIdMatch = searchedPatient.id && searchedPatient.id.toString().includes(nameOrId);
           return isNameMatch || isIdMatch;
         });
         this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
