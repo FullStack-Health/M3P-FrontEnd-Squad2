@@ -58,7 +58,7 @@ export class PatientComponent {
     addressStreet: new FormControl('', [Validators.required]),
     addressNumber: new FormControl(''),
     addressComplement: new FormControl(''),
-    addressNeighborhood: new FormControl(''),
+    addressNeighborhood: new FormControl('', [Validators.required]),
     addressCity: new FormControl('', [Validators.required]),
     addressState: new FormControl('', [Validators.required]),
     addressLandmark: new FormControl(''),
