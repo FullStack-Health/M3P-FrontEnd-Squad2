@@ -301,7 +301,9 @@ patientInfo.controls.maritalStatus.errors}">
                         formControlName="allergies"     
                          [ngClass]="{'error-border': (patientInfo.controls.allergies.dirty ||
                          patientInfo.controls.maritalStatus.touched) &&
-                         patientInfo.controls.allergies.errors}"></textarea>
+                         patientInfo.controls.allergies.errors}"
+                         (keydown)="onSpace($event)"
+                         ></textarea>
                          <span class="error-message" *ngIf="(patientInfo.controls.allergies.dirty ||
                         patientInfo.controls.allergies.touched) &&
                         patientInfo.controls.allergies.errors &&

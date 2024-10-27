@@ -268,6 +268,16 @@ deletePatient() {
     this.location.back();
     };
 
+    onSpace(event: KeyboardEvent): void {
+      if (event.key === ' ') {
+        event.preventDefault();
+        const target = event.target as HTMLTextAreaElement;
+        const { selectionStart, selectionEnd, value } = target;
+        target.value = value.substring(0, selectionStart) + ', ' + value.substring(selectionEnd);
+        target.selectionStart = target.selectionEnd = selectionStart + 2;
+      }
+    }
+
 
 
 }
