@@ -49,7 +49,7 @@ export class PatientComponent {
     email: new FormControl('', [Validators.email, Validators.required]),
     birthCity: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
     emergencyContact: new FormControl('', [Validators.required]),
-    allergies: new FormControl(''),
+    allergies: new FormControl('' , [Validators.required]),
     specialCare: new FormControl(''),
     insuranceCompany: new FormControl(''),
     insuranceNumber: new FormControl(''),
