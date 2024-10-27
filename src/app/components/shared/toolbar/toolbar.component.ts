@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
 
   loggedUserName: string = "";
   loggedUser: any;
@@ -15,19 +15,22 @@ export class ToolbarComponent {
   constructor(
     private router: Router,
     private toastrService: ToastrService,
-  ){
+  ) {
+  };
+
+  ngOnInit(): void {
     const loggedUserStorage = localStorage.getItem("loggedUser");
     if (loggedUserStorage) {
       this.loggedUser = JSON.parse(loggedUserStorage);
-      this.loggedUserName = this.loggedUser.name;
+      this.loggedUserName = this.loggedUser.nome;
     };
-  };
+  }
 
   getCurrentUrl() {
     return this.router.url;
   };
 
-  logout(){
+  logout() {
     localStorage.setItem("loggedUser", JSON.stringify(""));
     this.toastrService.success("Logout realizado com sucesso.", '')
     this.router.navigate(["login"]);;
