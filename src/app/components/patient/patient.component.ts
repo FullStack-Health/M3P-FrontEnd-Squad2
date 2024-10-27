@@ -46,7 +46,7 @@ export class PatientComponent {
     rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
     maritalStatus: new FormControl('', [Validators.required]),
     phone: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.email]),
+    email: new FormControl('', [Validators.email, Validators.required]),
     birthCity: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
     emergencyContact: new FormControl('', [Validators.required]),
     allergies: new FormControl(''),

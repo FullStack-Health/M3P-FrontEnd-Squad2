@@ -144,6 +144,10 @@ patientInfo.controls.maritalStatus.errors}">
                 patientInfo.controls.email.touched) &&
                 patientInfo.controls.email.errors &&
                 patientInfo.controls.email.errors['email']">Preencha um e-mail válido</span>
+                <span class="error-message" *ngIf="(patientInfo.controls.email.dirty ||
+                patientInfo.controls.email.touched) &&
+                patientInfo.controls.email.errors &&
+                patientInfo.controls.email.errors['required']">Campo obrigatório</span>
                 </div>
                 <div class="form-unit">
                     <label for="patient-birth-city">Naturalidade:</label>
