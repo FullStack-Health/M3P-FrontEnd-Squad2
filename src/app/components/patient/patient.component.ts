@@ -137,16 +137,38 @@ export class PatientComponent {
   };
 
   savePatient(){
+
+    
+
+console.log(this.patientInfo.value.birthDate);
+
     if (this.patientInfo.valid) {
+      const birthDateInput: string | null | undefined = this.patientInfo.value.birthDate;
+
+      if (birthDateInput) {
+        console.log(this.patientInfo.value.birthDate);
+        const formattedInput = `${birthDateInput.slice(0, 2)}/${birthDateInput.slice(2, 4)}/${birthDateInput.slice(4, 8)}`;
+        const birthDate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
+
+
+
+        
+
+
       const newPatient = {
         "name": this.patientInfo.value.name,
         "gender": this.patientInfo.value.gender,
-        "birthDate": this.patientInfo.value.birthDate,
+        "birthDate": birthDate,
         "cpf": this.patientInfo.value.cpf,
         "rg": this.patientInfo.value.rg,
         "maritalStatus": this.patientInfo.value.maritalStatus,
         "phone": this.patientInfo.value.phone,
         "email": this.patientInfo.value.email,
+
+        
+        
+
+
         "birthCity": this.patientInfo.value.birthCity,
         "emergencyContact": this.patientInfo.value.emergencyContact,
         "allergies": this.patientInfo.value.allergies,
@@ -171,13 +193,15 @@ export class PatientComponent {
           this.toastrService.success('Novo registro de paciente salvo com sucesso!', '');
         },
         error: (error) => {
+          console.log(newPatient)
           this.toastrService.error('Algo deu errado ao tentar salvar o registro de paciente.', '');
         }
     });
     } else {
       this.toastrService.warning("Preencha todos os campos obrigatórios corretamente");
     }
-  };
+  }
+};
 
   editPatient() {
     if (this.patientInfo.valid) {
