@@ -33,9 +33,11 @@ export class RecordsComponent {
 
   ngOnInit () {
     this.patientService.getPatient().subscribe((patients) => {
-    this.patientsList = patients;
+      console.log(patients)
+    this.patientsList = patients.content;
     this.resultsList = this.patientsList;
     this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
+    console.log(this.resultsList);
     })
   };
 
@@ -43,7 +45,7 @@ export class RecordsComponent {
     const nameOrId = this.patientInput.value.nameOrId?.trim();
     if (nameOrId) {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
+        this.patientsList = patients.content;
         this.resultsList = this.patientsList.filter((searchedPatient: { name: string, id: string }) => {
           const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(nameOrId.toLowerCase());
           const isIdMatch = searchedPatient.id && searchedPatient.id.includes(nameOrId);
@@ -56,7 +58,7 @@ export class RecordsComponent {
       });
     } else {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
+        this.patientsList = patients.content;
         this.resultsList = this.patientsList;
         this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
       });
