@@ -46,10 +46,10 @@ export class PatientComponent {
     rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
     maritalStatus: new FormControl('', [Validators.required]),
     phone: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.email]),
+    email: new FormControl('', [Validators.email, Validators.required]),
     birthCity: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
     emergencyContact: new FormControl('', [Validators.required]),
-    allergies: new FormControl(''),
+    allergies: new FormControl('' , [Validators.required]),
     specialCare: new FormControl(''),
     insuranceCompany: new FormControl(''),
     insuranceNumber: new FormControl(''),
@@ -58,7 +58,7 @@ export class PatientComponent {
     addressStreet: new FormControl('', [Validators.required]),
     addressNumber: new FormControl(''),
     addressComplement: new FormControl(''),
-    addressNeighborhood: new FormControl(''),
+    addressNeighborhood: new FormControl('', [Validators.required]),
     addressCity: new FormControl('', [Validators.required]),
     addressState: new FormControl('', [Validators.required]),
     addressLandmark: new FormControl(''),
@@ -137,16 +137,38 @@ export class PatientComponent {
   };
 
   savePatient(){
+
+    
+
+console.log(this.patientInfo.value.birthDate);
+
     if (this.patientInfo.valid) {
+      const birthDateInput: string | null | undefined = this.patientInfo.value.birthDate;
+
+      if (birthDateInput) {
+        console.log(this.patientInfo.value.birthDate);
+        const formattedInput = `${birthDateInput.slice(0, 2)}/${birthDateInput.slice(2, 4)}/${birthDateInput.slice(4, 8)}`;
+        const birthDate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
+
+
+
+        
+
+
       const newPatient = {
         "name": this.patientInfo.value.name,
         "gender": this.patientInfo.value.gender,
-        "birthDate": this.patientInfo.value.birthDate,
+        "birthDate": birthDate,
         "cpf": this.patientInfo.value.cpf,
         "rg": this.patientInfo.value.rg,
         "maritalStatus": this.patientInfo.value.maritalStatus,
         "phone": this.patientInfo.value.phone,
         "email": this.patientInfo.value.email,
+
+        
+        
+
+
         "birthCity": this.patientInfo.value.birthCity,
         "emergencyContact": this.patientInfo.value.emergencyContact,
         "allergies": this.patientInfo.value.allergies,
@@ -171,13 +193,15 @@ export class PatientComponent {
           this.toastrService.success('Novo registro de paciente salvo com sucesso!', '');
         },
         error: (error) => {
+          console.log(newPatient)
           this.toastrService.error('Algo deu errado ao tentar salvar o registro de paciente.', '');
         }
     });
     } else {
       this.toastrService.warning("Preencha todos os campos obrigatórios corretamente");
     }
-  };
+  }
+};
 
   editPatient() {
     if (this.patientInfo.valid) {
@@ -267,6 +291,16 @@ deletePatient() {
   goBack() {
     this.location.back();
     };
+
+    onSpace(event: KeyboardEvent): void {
+      if (event.key === ' ') {
+        event.preventDefault();
+        const target = event.target as HTMLTextAreaElement;
+        const { selectionStart, selectionEnd, value } = target;
+        target.value = value.substring(0, selectionStart) + ', ' + value.substring(selectionEnd);
+        target.selectionStart = target.selectionEnd = selectionStart + 2;
+      }
+    }
 
 
 
