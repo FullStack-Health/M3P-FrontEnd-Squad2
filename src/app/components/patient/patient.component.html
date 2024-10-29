@@ -144,6 +144,10 @@ patientInfo.controls.maritalStatus.errors}">
                 patientInfo.controls.email.touched) &&
                 patientInfo.controls.email.errors &&
                 patientInfo.controls.email.errors['email']">Preencha um e-mail válido</span>
+                <span class="error-message" *ngIf="(patientInfo.controls.email.dirty ||
+                patientInfo.controls.email.touched) &&
+                patientInfo.controls.email.errors &&
+                patientInfo.controls.email.errors['required']">Campo obrigatório</span>
                 </div>
                 <div class="form-unit">
                     <label for="patient-birth-city">Naturalidade:</label>
@@ -193,7 +197,7 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="address-street">Logradouro:</label>
                     <input id="address-street" name="address-street" type="text" formControlName="addressStreet"
-                        [ngClass]="{'error-border': (patientInfo.controls.addressStreet.dirty || patientInfo.controls.addressStreet.touched) &&patientInfo.controls.addressStreet.errors}" />
+                        [ngClass]="{'error-border': (patientInfo.controls.addressStreet.dirty || patientInfo.controls.addressStreet.touched) &&patientInfo.controls.addressStreet.errors}" readonly />
                     <span class="error-message" *ngIf="(patientInfo.controls.addressStreet.dirty ||
   patientInfo.controls.addressStreet.touched) &&
   patientInfo.controls.addressStreet.errors &&
@@ -210,22 +214,28 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="address-neighborhood">Bairro:</label>
                     <input id="address-neighborhood" name="address-neighborhood" type="text"
-                        formControlName="addressNeighborhood" />
+                        formControlName="addressNeighborhood" 
+                        [ngClass]="{'error-border': (patientInfo.controls.addressNeighborhood.dirty || patientInfo.controls.addressNeighborhood.touched) &&patientInfo.controls.addressNeighborhood.errors}"
+                        readonly/>
+                        <span class="error-message" *ngIf="(patientInfo.controls.addressStreet.dirty ||
+  patientInfo.controls.addressStreet.touched) &&
+  patientInfo.controls.addressStreet.errors &&
+  patientInfo.controls.addressStreet.errors['required']">Campo obrigatório</span>
                 </div>
                 <div class="form-unit">
                     <label for="address-city">Cidade:</label>
-                    <input id="address-city" name="address-city" type="text" formControlName="addressCity"
+                    <input id="address-city" name="address-city" type="text" formControlName="addressCity" readonly
                         [ngClass]="{'error-border': (patientInfo.controls.addressCity.dirty || patientInfo.controls.addressCity.touched) &&patientInfo.controls.addressCity.errors}" />
                     <span class="error-message" *ngIf="(patientInfo.controls.addressCity.dirty ||
   patientInfo.controls.addressCity.touched) &&
   patientInfo.controls.addressCity.errors &&
   patientInfo.controls.addressCity.errors['required']">Campo obrigatório</span>
                 </div>
-                <div class="form-unit">
+                <div class="form-unit" >
                     <label for="address-state">Estado:</label>
-                    <select id="address-state" name="address-state" type="text" formControlName="addressState"
+                    <input id="address-state" name="address-state" type="text" formControlName="addressState" readonly
                         [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}">
-                        <option value="AC">Acre</option>
+                        <!-- <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
                         <option value="AP">Amapá</option>
                         <option value="AM">Amazonas</option>
@@ -251,8 +261,8 @@ patientInfo.controls.maritalStatus.errors}">
                         <option value="SC">Santa Catarina</option>
                         <option value="SP">São Paulo</option>
                         <option value="SE">Sergipe</option>
-                        <option value="TO">Tocantins</option>
-                    </select>
+                        <option value="TO">Tocantins</option> -->
+                
                     <!-- <input id="address-state" name="address-state" type="text" formControlName="addressState"
                         [ngClass]="{'error-border': (patientInfo.controls.addressState.dirty || patientInfo.controls.addressState.touched) &&patientInfo.controls.addressState.errors}" /> -->
                     <span class="error-message" *ngIf="(patientInfo.controls.addressState.dirty ||
@@ -294,7 +304,16 @@ patientInfo.controls.maritalStatus.errors}">
                 <div class="form-unit">
                     <label for="patient-allergies">Lista de Alergias:</label>
                     <textarea id="patient-allergies" name="patient-allergies" type="text"
-                        formControlName="allergies"></textarea>
+                        formControlName="allergies"     
+                         [ngClass]="{'error-border': (patientInfo.controls.allergies.dirty ||
+                         patientInfo.controls.maritalStatus.touched) &&
+                         patientInfo.controls.allergies.errors}"
+                         (keydown)="onSpace($event)"
+                         ></textarea>
+                         <span class="error-message" *ngIf="(patientInfo.controls.allergies.dirty ||
+                        patientInfo.controls.allergies.touched) &&
+                        patientInfo.controls.allergies.errors &&
+                        patientInfo.controls.allergies.errors['required']">Campo obrigatório</span>
                 </div>
                 <div class="form-unit">
                     <label for="patient-care">Cuidados Específicos:</label>
