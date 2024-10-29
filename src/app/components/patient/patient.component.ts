@@ -60,7 +60,7 @@ export class PatientComponent {
     addressComplement: new FormControl(''),
     addressNeighborhood: new FormControl('', [Validators.required]),
     addressCity: new FormControl('', [Validators.required]),
-    addressState: new FormControl(''),
+    addressState: new FormControl('', [Validators.required]),
     addressLandmark: new FormControl(''),
   });
 
@@ -81,12 +81,24 @@ export class PatientComponent {
   };
 
   getPatient(patientId: string) {
+
+    const convertFromBd = (birthDate: string): string => { if (!birthDate) return ''; 
+    const parts = birthDate.split('T')[0].split('-'); 
+    return `${parts[2]}${parts[1]}${parts[0]}`;}
+    
+
+
     this.patientService.getPatient().subscribe((patients) => {
       this.patientToEdit = patients.content.find((patient: { id: string; }) => patient.id == patientId);
+    
+      const formattedBirthDateFromBd = convertFromBd(this.patientToEdit.birthDate);
+      const formattedInsuranceDateFromBd = convertFromBd(this.patientToEdit.insuranceExpiration);
+      
       this.patientInfo.patchValue({
+        
         name: this.patientToEdit.name,
         gender: this.patientToEdit.gender,
-        birthDate: this.patientToEdit.birthDate,
+        birthDate: formattedBirthDateFromBd,
         cpf: this.patientToEdit.cpf,
         rg: this.patientToEdit.rg,
         maritalStatus: this.patientToEdit.maritalStatus,
@@ -98,7 +110,7 @@ export class PatientComponent {
         specialCare: this.patientToEdit.specialCare,
         insuranceCompany: this.patientToEdit.insuranceCompany,
         insuranceNumber: this.patientToEdit.insuranceNumber,
-        insuranceExpiration: this.patientToEdit.insuranceExpiration,
+        insuranceExpiration: formattedInsuranceDateFromBd,
         cep: this.patientToEdit.address.cep,
         addressStreet: this.patientToEdit.address.logradouro,
         addressNumber: this.patientToEdit.address.numero,
@@ -139,19 +151,22 @@ export class PatientComponent {
   savePatient(){
 
     
-
-console.log(this.patientInfo.value.birthDate);
+    const convertToYYYYMMDD = (date: string): string => { if (!date) return ''; 
+      const day = date.slice(0, 2); const month = date.slice(2, 4); 
+      const year = date.slice(4, 8); return `${year}-${month}-${day}`;}
 
     if (this.patientInfo.valid) {
       const birthDateInput: string | null | undefined = this.patientInfo.value.birthDate;
+      const insuranceExdate: string | null | undefined = this.patientInfo.value.insuranceExpiration;
+      if (birthDateInput && insuranceExdate ) {
+        
+        const birthDate = convertToYYYYMMDD(birthDateInput); 
+        const insuranceExpiration = convertToYYYYMMDD(insuranceExdate);
 
-      if (birthDateInput) {
-        console.log(this.patientInfo.value.birthDate);
-        const formattedInput = `${birthDateInput.slice(0, 2)}/${birthDateInput.slice(2, 4)}/${birthDateInput.slice(4, 8)}`;
-        const birthDate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
+        // const formattedInput = `${birthDateInput.slice(0, 2)}/${birthDateInput.slice(2, 4)}/${birthDateInput.slice(4, 8)}`;
+        // const birthDate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
 
-
-
+        //const insuranceExdate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
         
 
 
@@ -165,21 +180,17 @@ console.log(this.patientInfo.value.birthDate);
         "phone": this.patientInfo.value.phone,
         "email": this.patientInfo.value.email,
 
-        
-        
-
-
         "birthCity": this.patientInfo.value.birthCity,
         "emergencyContact": this.patientInfo.value.emergencyContact,
         "allergies": this.patientInfo.value.allergies,
         "specialCare": this.patientInfo.value.specialCare,
         "insuranceCompany": this.patientInfo.value.insuranceCompany,
         "insuranceNumber": this.patientInfo.value.insuranceNumber,
-        "insuranceExpiration": this.patientInfo.value.insuranceExpiration,
+        "insuranceExpiration": insuranceExpiration,
         "address": {
           "cep": this.patientInfo.value.cep,
           "cidade": this.patientInfo.value.addressCity,
-          "state": this.patientInfo.value.addressState,
+          "estado": this.patientInfo.value.addressState,
           "logradouro": this.patientInfo.value.addressStreet,
           "numero": this.patientInfo.value.addressNumber,
           "complemento": this.patientInfo.value.addressComplement,
@@ -223,13 +234,13 @@ console.log(this.patientInfo.value.birthDate);
         "insuranceExpiration": this.patientInfo.value.insuranceExpiration,
         "address": {
           "cep": this.patientInfo.value.cep,
-          "city": this.patientInfo.value.addressCity,
-          "state": this.patientInfo.value.addressState,
-          "street": this.patientInfo.value.addressStreet,
-          "number": this.patientInfo.value.addressNumber,
-          "complement": this.patientInfo.value.addressComplement,
-          "neighborhood": this.patientInfo.value.addressNeighborhood,
-          "landmark": this.patientInfo.value.addressLandmark,
+          "cidade": this.patientInfo.value.addressCity,
+          "estado": this.patientInfo.value.addressState,
+          "logradouro": this.patientInfo.value.addressStreet,
+          "numero": this.patientInfo.value.addressNumber,
+          "complemento": this.patientInfo.value.addressComplement,
+          "bairro": this.patientInfo.value.addressNeighborhood,
+          "pontoDeReferencia": this.patientInfo.value.addressLandmark,
         }
       }
       this.patientService.editPatient(this.patientToEdit.id, editedPatient).subscribe({
@@ -302,6 +313,12 @@ deletePatient() {
       }
     }
 
+    convertDatefromBd(){
+        const convertFromBd = (birthDate: string): string => { if (!birthDate) return ''; 
+        const parts = birthDate.split('T')[0].split('-'); 
+        return `${parts[2]}${parts[1]}${parts[0]}`;}
+
+    }
 
 
 }
