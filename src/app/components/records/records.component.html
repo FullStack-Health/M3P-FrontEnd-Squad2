@@ -10,7 +10,7 @@
 
     <div *ngIf="resultsList" id="patient-results">
         <div *ngFor="let patient of resultsList">
-            <div class="patient-strip" (click)="redirectToDetail(patient.id)">
+            <div class="patient-strip">
                 <div class="strip-main">
                 <h3 class="strip-name">{{patient.name}}</h3>
                 </div>
@@ -32,6 +32,7 @@
                 <span *ngIf="!patient.insuranceCompany">Não possui convênio.</span></div>
                 </div>
                 </div>
+                <div id="patient-search" class="strip-unit"> <button (click)="redirectToDetail(patient.id)" class="primary-button" >Editar</button> </div>
             </div>
         </div>
     </div>

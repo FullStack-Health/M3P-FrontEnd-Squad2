@@ -60,7 +60,7 @@ export class PatientComponent {
     addressComplement: new FormControl(''),
     addressNeighborhood: new FormControl('', [Validators.required]),
     addressCity: new FormControl('', [Validators.required]),
-    addressState: new FormControl('', [Validators.required]),
+    addressState: new FormControl(''),
     addressLandmark: new FormControl(''),
   });
 
@@ -82,7 +82,7 @@ export class PatientComponent {
 
   getPatient(patientId: string) {
     this.patientService.getPatient().subscribe((patients) => {
-      this.patientToEdit = patients.find((patient: { id: string; }) => patient.id == patientId);
+      this.patientToEdit = patients.content.find((patient: { id: string; }) => patient.id == patientId);
       this.patientInfo.patchValue({
         name: this.patientToEdit.name,
         gender: this.patientToEdit.gender,
@@ -100,13 +100,13 @@ export class PatientComponent {
         insuranceNumber: this.patientToEdit.insuranceNumber,
         insuranceExpiration: this.patientToEdit.insuranceExpiration,
         cep: this.patientToEdit.address.cep,
-        addressStreet: this.patientToEdit.address.street,
-        addressNumber: this.patientToEdit.address.number,
-        addressComplement: this.patientToEdit.address.complement,
-        addressNeighborhood: this.patientToEdit.address.neighborhood,
-        addressCity: this.patientToEdit.address.city,
-        addressState: this.patientToEdit.address.state,
-        addressLandmark: this.patientToEdit.address.landmark,
+        addressStreet: this.patientToEdit.address.logradouro,
+        addressNumber: this.patientToEdit.address.numero,
+        addressComplement: this.patientToEdit.address.complemento,
+        addressNeighborhood: this.patientToEdit.address.bairro,
+        addressCity: this.patientToEdit.address.cidade,
+        addressState: this.patientToEdit.address.estado,
+        addressLandmark: this.patientToEdit.address.pontoDeReferencia,
         });
       })
   };
@@ -178,13 +178,13 @@ console.log(this.patientInfo.value.birthDate);
         "insuranceExpiration": this.patientInfo.value.insuranceExpiration,
         "address": {
           "cep": this.patientInfo.value.cep,
-          "city": this.patientInfo.value.addressCity,
+          "cidade": this.patientInfo.value.addressCity,
           "state": this.patientInfo.value.addressState,
-          "street": this.patientInfo.value.addressStreet,
-          "number": this.patientInfo.value.addressNumber,
-          "complement": this.patientInfo.value.addressComplement,
-          "neighborhood": this.patientInfo.value.addressNeighborhood,
-          "landmark": this.patientInfo.value.addressLandmark,
+          "logradouro": this.patientInfo.value.addressStreet,
+          "numero": this.patientInfo.value.addressNumber,
+          "complemento": this.patientInfo.value.addressComplement,
+          "bairro": this.patientInfo.value.addressNeighborhood,
+          "pontoDeReferencia": this.patientInfo.value.addressLandmark,
         }
       };
       this.patientService.addPatient(newPatient).subscribe({
