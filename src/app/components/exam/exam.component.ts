@@ -96,8 +96,8 @@ export class ExamComponent {
 
         this.patientsList = patients.content;
         this.resultsList = this.patientsList.filter((searchedPatient: any) => {
-          const isNameMatch = searchedPatient.paciente?.name?.toLowerCase().includes(nameOrId.toLowerCase());
-          const isIdMatch = searchedPatient.paciente?.id?.toString() ===nameOrId;          
+          const isNameMatch = searchedPatient.name?.toLowerCase().includes(nameOrId.toLowerCase());
+          const isIdMatch = searchedPatient.id?.toString() ===nameOrId;          
           return isNameMatch || isIdMatch;
         });
  
