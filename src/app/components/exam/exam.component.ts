@@ -90,14 +90,17 @@ export class ExamComponent {
 
   searchPatient() {
     const nameOrId = this.patientInput.value.nameOrId?.trim();
+
     if (nameOrId) {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
-        this.resultsList = this.patientsList.filter((searchedPatient: { name: string, id: string }) => {
-          const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(nameOrId.toLowerCase());
-          const isIdMatch = searchedPatient.id && searchedPatient.id.includes(nameOrId);
+
+        this.patientsList = patients.content;
+        this.resultsList = this.patientsList.filter((searchedPatient: any) => {
+          const isNameMatch = searchedPatient.paciente?.name?.toLowerCase().includes(nameOrId.toLowerCase());
+          const isIdMatch = searchedPatient.paciente?.id?.toString() ===nameOrId;          
           return isNameMatch || isIdMatch;
         });
+ 
         this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
         if (this.resultsList.length === 0) {
           this.toastrService.error("Não foram encontrados registros de paciente com este nome ou código de registro.");

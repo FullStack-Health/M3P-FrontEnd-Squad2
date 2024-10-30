@@ -11,22 +11,22 @@
 
     <div *ngIf="resultsList && editingMode == false" id="patient-results">
         <div *ngFor="let patient of resultsList">
-            <div class="patient-strip" (click)="selectPatient(patient.name, patient.id)">
+            <div class="patient-strip" (click)="selectPatient(patient.paciente.name, patient.paciente.id)">
                 <div class="strip-main">
-                <h3 class="strip-name">{{patient.name}}</h3>
+                <h3 class="strip-name">{{patient.paciente.name}}</h3>
                 </div>
                 <div class="strip-secondary">
                 <div class="strip-unit">
-                <div class="strip-code">Registro {{patient.id}}</div>
+                <div class="strip-code">Registro {{patient.paciente.id}}</div>
                 </div>
                 <div class="strip-unit">
                 <div class="strip-label">Data de nascimento:</div>
-                <div>{{patient.birthDate | birthDate}}</div>
+                <div>{{patient.paciente.birthDate | birthDate}}</div>
                 </div>
                 <div class="strip-unit">
                 <div class="strip-label">Convênio:</div>
-                <div>{{patient.insuranceCompany}}
-                <span *ngIf="!patient.insuranceCompany">Não possui convênio.</span></div>
+                <div>{{patient.paciente.insuranceCompany}}
+                <span *ngIf="!patient.paciente.insuranceCompany">Não possui convênio.</span></div>
                 </div>
                 </div>
             </div>
