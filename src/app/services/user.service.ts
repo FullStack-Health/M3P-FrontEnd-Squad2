@@ -37,4 +37,19 @@ export class UserService {
     return this.httpClient.get<any>(this.urlpath);
   }
 
+  getUser(userId: string) {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.urlpath}/${userId}`);
+  }
+
+  put(user: any, userId: string) {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.put<any>(`${this.urlpath}/${userId}`, user, { headers: headers });
+  }
+
+  delete(userId: string) {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.delete<any>(`${this.urlpath}/${userId}`);
+  }
+
 }
