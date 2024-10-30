@@ -8,11 +8,12 @@ import { DatePipe } from '@angular/common';
 import { PhonePipe } from '../../../pipes/phone.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCalendarDay, faClock, faStethoscope, faMicroscope, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { DateFormatInPipe } from '../../../pipes/date-format-in.pipe';
 
 @Component({
   selector: 'app-records-detail',
   standalone: true,
-  imports: [CommonModule, DatePipe, PhonePipe, FontAwesomeModule],
+  imports: [CommonModule, DatePipe, PhonePipe, FontAwesomeModule, DateFormatInPipe],
   templateUrl: './records-detail.component.html',
   styleUrl: './records-detail.component.scss'
 })
