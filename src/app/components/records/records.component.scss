@@ -92,3 +92,27 @@
         }
     }
 }
+
+.edit-button {
+    background-color: $buttonColor;
+    border-radius: 10px;
+    line-height: 65px;
+    &:hover {
+        background-color: $buttonHover;
+    }
+    &:active {
+        background-color: $buttonActive;
+    }
+}
+
+#edit-patientDetail{
+    button {
+        @include basic-button;
+        margin-left: 10px;
+        margin-right: 10px;
+        
+        
+        
+    }
+
+}

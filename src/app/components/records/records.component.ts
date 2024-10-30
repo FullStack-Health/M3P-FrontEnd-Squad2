@@ -67,7 +67,12 @@ export class RecordsComponent {
   };
 
   redirectToDetail(patientId: string){
+    this.router.navigate(["medical-records", patientId]);
+  };
+
+  redirectToPatient(patientId: string){
     this.router.navigate(["edit-patient", patientId]);
   };
+
 
 }
