@@ -20,6 +20,12 @@
         <div *ngIf="getCurrentUrl() == '/medical-records'">
             Listagem de Prontuário
         </div>
+        <div *ngIf="getCurrentUrl() == '/users-list'">
+            Listagem de Pessoas Usuárias
+        </div>
+        <div *ngIf="getCurrentUrl().includes('/edit-user')">
+            Editar Pessoa Usuária
+        </div>
         <div *ngIf="getCurrentUrl().includes('/medical-records/')">
             Prontuário de Paciente
         </div>
