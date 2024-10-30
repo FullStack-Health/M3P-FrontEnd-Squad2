@@ -7,6 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class BirthDatePipe implements PipeTransform {
 
   transform(value: string): string {
+
 //    return value[0]+value[1]+"/"+value[2]+value[3]+"/"+value[4]+value[5]+value[6]+value[7];
 if (!value) return ''; 
 
@@ -20,6 +21,7 @@ const year = date.getFullYear();
 
 return `${day}/${month}/${year}`;
 }
+
   }
 
 
