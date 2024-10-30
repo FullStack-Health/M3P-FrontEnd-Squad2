@@ -10,13 +10,25 @@
             <div class="event-button"><button (click)="editPatient(patient.id)">Atualizar cadastro</button></div>
             </div>
             <h4 *ngIf="patient.insuranceCompany">Convênio</h4>
+            <h4 *ngIf="!patient.insuranceCompany">Convênio</h4>
             <p *ngIf="patient.insuranceCompany">{{patient.insuranceCompany}}</p>
+            <p *ngIf="!patient.insuranceCompany">Não possui</p>
+            <h4>Contato</h4>
+            <p>{{patient.phone | phone}}</p>
+            <h4>CPF:</h4>
+            <p>{{patient.cpf}}</p>
+            <h4>Data de nascimento:</h4>
+            <p>{{patient.birthDate}}</p>
+
+
             <h4>Contato de emergência</h4>
             <p>{{patient.emergencyContact | phone}}</p>
             <h4 *ngIf="patient.allergies">Lista de alergias</h4>
             <p *ngIf="patient.allergies">{{patient.allergies}}</p>
             <h4 *ngIf="patient.specialCare">Lista de cuidados específicos</h4>
+            <h4 *ngIf="!patient.specialCare">Lista de cuidados específicos</h4>
             <p *ngIf="patient.specialCare">{{patient.specialCare}}</p>
+            <p *ngIf="!patient.specialCare">{{patient.specialCare}}Não possui</p>
         </div>
     </div>
 

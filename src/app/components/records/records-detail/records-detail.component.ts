@@ -40,7 +40,7 @@ export class RecordsDetailComponent {
     this.activatedRoute.params.subscribe((parameters) => {
       this.patientId = parameters['id'];
       this.patientService.getPatient().subscribe((patients) => {
-        this.patient = patients.find((patient: { id: string; }) => patient.id == this.patientId);
+        this.patient = patients.content.find((patient: { id: string; }) => patient.id == this.patientId);
       });
       let patientConsultations: any[] = [];
       this.consultationService.getConsultation().subscribe((consultations) => {
