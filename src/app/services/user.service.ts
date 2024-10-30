@@ -37,4 +37,9 @@ export class UserService {
     return this.httpClient.get<any>(this.urlpath);
   }
 
+  getUser(userId: string) {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.urlpath}/${userId}`);
+  }
+
 }
