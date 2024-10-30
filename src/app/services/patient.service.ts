@@ -20,7 +20,7 @@ export class PatientService {
   
   getPatient() {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.get<any>(`${this.base}/prontuarios`, { headers: headers });
+    return this.httpClient.get<any>(`${this.base}`, { headers: headers }); //tirei o /pronturarios pois pra essa requiscao os dados de exame/consulta/usuario nao sao relevantes
   };
 
   addPatient(newPatientData: any) {

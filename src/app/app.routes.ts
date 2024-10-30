@@ -11,6 +11,7 @@ import { loginGuard } from './guards/login.guard';
 import { perfilGuard } from './guards/perfil.guard';
 import { UsersComponent } from './components/users/users.component';
 import { adminGuard } from './guards/admin.guard';
+import { EditUserComponent } from './components/users/edit-user/edit-user.component';
 
 export const routes: Routes = [
     {
@@ -78,6 +79,13 @@ export const routes: Routes = [
     {
         path: "users-list",
         component: UsersComponent,
+        canActivate: [authGuard, adminGuard],
+    },
+    {
+        path: "edit-user",
+        children: [
+            { path: ":id", component: EditUserComponent },
+        ],
         canActivate: [authGuard, adminGuard],
     },
 ];
