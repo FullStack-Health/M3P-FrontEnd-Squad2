@@ -1,0 +1,105 @@
+<div id="edit-user-container">
+    <form id="user-form" [formGroup]="userInfo">
+
+        <div class="edit-user-header">
+            <div>
+                <button class="secondary-button" (click)="goBack()" title="Voltar"><fa-icon
+                        [icon]="faCircleChevronLeft"></fa-icon>Voltar</button>
+            </div>
+            <div class="header-right-side">
+                <button (click)="delete()" class="danger-button" title="Deletar">Deletar</button>
+                <button (click)="save()" class="primary-button" type="submit" title="Salvar cadastro">Salvar</button>
+            </div>
+
+        </div>
+        <div>
+            <section class="user-section">
+                <div class="form-unit">
+                    <label for="user-name">Nome completo:</label>
+                    <input id="user-name" name="user-name" type="text" formControlName="name" required [ngClass]="{'error-border': (userInfo.controls.name.dirty ||
+        userInfo.controls.name.touched) &&
+        userInfo.controls.name.errors}" />
+                    <span class="error-message" *ngIf="(userInfo.controls.name.dirty ||
+            userInfo.controls.name.touched) &&
+            userInfo.controls.name.errors &&
+            userInfo.controls.name.errors['required']">Campo obrigatório</span>
+                    <span class="error-message" *ngIf="(userInfo.controls.name.dirty &&
+            userInfo.controls.name.touched) &&
+            userInfo.controls.name.errors &&
+            userInfo.controls.name.errors['minlength']">Preencha o nome completo</span>
+                    <span class="error-message" *ngIf="(userInfo.controls.name.dirty ||
+            userInfo.controls.name.touched) &&
+            userInfo.controls.name.errors &&
+            userInfo.controls.name.errors['maxlength']">Este campo não pode ultrapassar 64 caracteres</span>
+                </div>
+                
+
+
+                <div class="form-unit">
+                    <label for="user-birthdate">Data de nascimento:</label>
+                    <input id="user-birthdate" name="user-birthdate" type="text" mask="d0/M0/0000"
+                        formControlName="birthDate" [validation]="false" [hiddenInput]="true"
+                        required [ngClass]="{'error-border': (userInfo.controls.birthDate.dirty ||
+        userInfo.controls.birthDate.touched) &&
+        userInfo.controls.birthDate.errors}" />
+                    <span class="error-message" *ngIf="(userInfo.controls.birthDate.dirty ||
+        userInfo.controls.birthDate.touched) &&
+        userInfo.controls.birthDate.errors &&
+        userInfo.controls.birthDate.errors['required']">Campo obrigatório</span>
+                    <span class="error-message" *ngIf="(userInfo.controls.birthDate.dirty ||
+        userInfo.controls.birthDate.touched) &&
+        userInfo.controls.birthDate.errors &&
+        userInfo.controls.birthDate.errors['pattern']">Utilize o formato dd/mm/aaaa</span>
+                </div>
+
+                <div class="form-unit">
+                    <label for="user-cpf">CPF:</label>
+                    <input id="user-cpf" name="user-cpf" type="text" mask="000.000.000-00" formControlName="cpf"
+                        [dropSpecialCharacters]="false" required [ngClass]="{'error-border': (userInfo.controls.cpf.dirty ||
+                    userInfo.controls.cpf.touched) &&
+                    userInfo.controls.cpf.errors}" />
+                    <span class="error-message" *ngIf="(userInfo.controls.cpf.dirty ||
+                    userInfo.controls.cpf.touched) &&
+                    userInfo.controls.cpf.errors &&
+                    userInfo.controls.cpf.errors['required']">Campo obrigatório</span>
+                    <span class="error-message" *ngIf="(userInfo.controls.cpf.dirty ||
+                     userInfo.controls.cpf.touched) &&
+                     userInfo.controls.cpf.errors && (userInfo.valid == false)">Preencha um CPF válido</span>
+                </div>
+
+               
+               
+                <div class="form-unit">
+                    <label for="user-phone">Telefone:</label>
+                    <input id="user-phone" name="user-phone" type="tel" mask="(00) 0 0000-0000"
+                        [dropSpecialCharacters]="false" formControlName="phone" required
+                        [ngClass]="{'error-border': (userInfo.controls.phone.dirty || userInfo.controls.phone.touched) && userInfo.controls.phone.errors}" />
+                    <span class="error-message"
+                        *ngIf="(userInfo.controls.phone.dirty || userInfo.controls.phone.touched) && userInfo.controls.phone.errors && userInfo.controls.phone.errors['required']">Campo
+                        obrigatório</span>
+                    <span class="error-message"
+                        *ngIf="(userInfo.controls.phone.dirty || userInfo.controls.phone.touched) && userInfo.controls.phone.errors && (userInfo.valid == false)">Preencha
+                        um telefone válido</span>
+
+                </div>
+                <div class="form-unit">
+                    <label for="user-email">E-mail:</label>
+                    <input id="user-email" name="user-email" type="text" formControlName="email" [ngClass]="{'error-border': (userInfo.controls.email.dirty ||
+                userInfo.controls.email.touched) &&
+                userInfo.controls.email.errors}" />
+                    <span class="error-message" *ngIf="(userInfo.controls.email.dirty ||
+                userInfo.controls.email.touched) &&
+                userInfo.controls.email.errors &&
+                userInfo.controls.email.errors['email']">Preencha um e-mail válido</span>
+                <span class="error-message" *ngIf="(userInfo.controls.email.dirty ||
+                userInfo.controls.email.touched) &&
+                userInfo.controls.email.errors &&
+                userInfo.controls.email.errors['required']">Campo obrigatório</span>
+                </div>
+                
+            </section>
+
+
+        </div>
+    </form>
+</div>
