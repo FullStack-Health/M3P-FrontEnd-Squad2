@@ -44,11 +44,8 @@ export class SidemenuComponent {
         this.userDoctor = perfil === "MEDICO";
         this.userPatient = perfil === "PACIENTE";
 
-        //TODO: Atualizar patientId com o Id da pessoa paciente logada (aqui está o id de usuária, não é esse)
-        //Problema: a pessoa paciente só tem acesso ao GET pacientes/id dela, mas qual o id dela?
         if (this.userPatient) {
-              this.patientId = parsedUser.id;
-              console.log(this.patientId);
+              this.patientId = parsedUser.paciente.id;
         };
     };   
   };
