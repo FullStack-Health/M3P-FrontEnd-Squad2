@@ -9,12 +9,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from '../../../services/user.service';
 import { DateFormatInPipe } from '../../../pipes/date-format-in.pipe';
+import { DateFormatOutPipe } from '../../../pipes/date-format-out.pipe';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, NgxMaskDirective, NgxMaskPipe, DateFormatInPipe],
-  providers: [DateFormatInPipe],
+  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, NgxMaskDirective, NgxMaskPipe, DateFormatInPipe, DateFormatOutPipe],
+  providers: [DateFormatInPipe, DateFormatOutPipe],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss'
 })
@@ -28,6 +29,7 @@ export class EditUserComponent {
     private confirmDialogService: ConfirmDialogService,
     private toastrService: ToastrService,
     private dateFormatIn: DateFormatInPipe,
+    private dateFormatOut: DateFormatOutPipe,
   ) { }
 
   userToEdit: any = {};
@@ -66,6 +68,9 @@ export class EditUserComponent {
           phone: this.userToEdit.telefone,
           email: this.userToEdit.email
         });
+      },
+      error: (error) => {
+        this.toastrService.error('Não foi possível carregar este registro.', error.error);
       }
     });
   }
@@ -73,33 +78,47 @@ export class EditUserComponent {
 
   save(){
     if (this.userInfo.valid) {
-      this.toastrService.success('Registro de paciente atualizado com sucesso!', '');
-      this.router.navigate(["home"]);
+      let formattedDate = '';
+      if (this.userInfo.value.birthDate) {
+      formattedDate = this.dateFormatOut.transform(this.userInfo.value.birthDate);
+      }
+      const user = {
+        nome: this.userInfo.value.name,
+        dataNascimento: formattedDate,
+        cpf: this.userInfo.value.cpf,
+        telefone: this.userInfo.value.phone,
+        email: this.userInfo.value.email,
+      };
+      this.userService.put(user, this.userToEdit.id).subscribe({
+        next: (response): void => {
+          this.toastrService.success('Registro de pessoa usuária atualizado com sucesso!', '');
+          this.router.navigate(["users-list"]);
+        },
+        error: (error) => {
+          this.toastrService.error('Não foi possível atualizar o registro.', error.error);
+        }
+      })
     } else {
-      this.toastrService.error('Por favor, preencha todos os campos obrigatórios.', '');
+      this.toastrService.warning('Por favor, preencha todos os campos obrigatórios.', '');
     }
   }
 
-
   delete() {
-    // this.confirmDialogService.confirm('Confirmar', 'Você deseja realmente apagar este registro de paciente? Esta ação é irreversível.', "Sim", "Cancelar")
-    // .then(async (confirmed) => {
-    //   if (confirmed) {
-    //     if (await this.isDeletable(this.patientToEdit.id)) {
-    //       this.patientService.deletePatient(this.patientToEdit.id).subscribe({
-    //         next: (response): void => {
-    //           this.toastrService.success('Registro de paciente apagado com sucesso!', '');
-    //           this.router.navigate(["home"]);
-    //         },
-    //         error: (error) => {
-    //           this.toastrService.error('Algo deu errado ao tentar apagar o registro.', '');
-    //         }
-    //       })
-    //     } else {
-    //       this.toastrService.warning('Não é possível apagar um registro de paciente que esteja associado a exames ou consultas.', '');
-    //     }}
-    // })
-    // .catch((error) => {});
+    this.confirmDialogService.confirm('Confirmar', 'Você deseja realmente apagar este registro de pessoa usuária? Esta ação é irreversível.', "Sim", "Cancelar")
+    .then(async (confirmed) => {
+      if (confirmed) {
+          this.userService.delete(this.userToEdit.id).subscribe({
+            next: (response): void => {
+              this.toastrService.success('Registro de pessoa usuária apagado com sucesso!', '');
+              this.router.navigate(["users-list"]);
+            },
+            error: (error) => {
+              this.toastrService.error('Não foi possível apagar este registro.', error.error);
+            }
+          })
+        }
+    })
+    .catch((error) => {});
   };
 
   goBack() {
