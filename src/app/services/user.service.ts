@@ -32,4 +32,9 @@ export class UserService {
     return this.httpClient.put<any>(updateUrl, newPassword, { headers: headers });
   }
 
+  getUsers() {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(this.urlpath);
+  }
+
 }

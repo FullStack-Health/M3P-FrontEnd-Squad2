@@ -1,1 +1,42 @@
-<p>Listagem de pessoas usuárias!</p>
+<div id="users-container">
+
+    <div id="user-search">
+        <label for="user-input">Busca de pessoa usuária (por e-mail ou código de registro):</label>
+        <form id="user-search-form" (ngSubmit)="searchUser()" [formGroup]="userInput">
+        <input id="user-input" type="text" formControlName="emailOrId">
+        <button type="submit" class="primary-button" title="Pesquisar">Pesquisar</button>
+        </form>
+    </div>
+
+    <div *ngIf="resultsList" id="user-results">
+        <div *ngFor="let user of resultsList">
+            <div class="user-strip" (click)="redirectToEdit(user.id)">
+                <div class="strip-main">
+                <h3 class="strip-name">{{user.email}}
+                </h3>
+                </div>
+                <div class="strip-secondary">
+                <div class="strip-unit">
+                <div class="strip-code">Registro {{user.id}}</div>
+                </div>
+                <div class="strip-unit">
+                <div class="strip-label">Perfil:</div>
+                <div>{{user.perfil}}</div>
+                </div>
+                <div class="strip-unit">
+                <div class="strip-label">Senha:</div>
+                <div>{{user.senhaMascarada}}</div>
+                </div>
+                <div class="strip-unit">
+                    <div class="strip-label">Telefone:</div>
+                    <div>{{user.telefone}}
+                        <span *ngIf="!user.telefone">-</span>
+                    </div>
+                    </div>
+                <div><button type="button" (click)="redirectToEdit(user.id)" class="primary-button" title="Editar">Editar</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
