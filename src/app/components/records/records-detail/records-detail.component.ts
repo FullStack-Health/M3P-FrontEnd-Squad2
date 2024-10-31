@@ -76,7 +76,18 @@ export class RecordsDetailComponent {
 
 
           this.patientEvents = patientConsultations.concat(patientExams);
-          this.patientEvents.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          
+          // this.patientEvents.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          // this.patientEvents.sort((a: any, b: any) => { // Use a data correta para ordenar 
+          //   const dateA = a.date ? new Date(a.date).getTime() : new Date(a.dataExame).getTime(); 
+          //   const dateB = b.date ? new Date(b.date).getTime() : new Date(b.dataExame).getTime(); 
+          //   return dateA - dateB; 
+          // });
+          patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Ordenar exames cronologicamente 
+          patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime()); // Concatenar consultas ordenadas e exames ordenados 
+          this.patientEvents = [...patientConsultations, ...patientExams];
+
+
         });
       });
     });
