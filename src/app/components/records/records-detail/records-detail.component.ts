@@ -40,15 +40,41 @@ export class RecordsDetailComponent {
   ngOnInit() {
     this.activatedRoute.params.subscribe((parameters) => {
       this.patientId = parameters['id'];
+      console.log("id do paciente vindo da lista: ",this.patientId);
       this.patientService.getPatient().subscribe((patients) => {
         this.patient = patients.content.find((patient: { id: string; }) => patient.id == this.patientId);
       });
-      let patientConsultations: any[] = [];
-      this.consultationService.getConsultation().subscribe((consultations) => {
-        patientConsultations = consultations.filter((consultation: { patientId: string; }) => consultation.patientId == this.patientId);
+       let patientConsultations: any[] = [];
+      // this.consultationService.getConsultation().subscribe((consultations) => {
+      //   patientConsultations = consultations.content.filter((consultation: { patientId: string; }) => consultation.patientId === this.patient.id);
+      //   console.log("Id do paciente pro filtro", this.patientId);
+      //   console.log("Todas consultas", consultations);
+      //   console.log("Consultas paciente", patientConsultations );
+        
+        
+        this.consultationService.getConsultation().subscribe((consultations) => {
+          console.log("Consultations antes do filtro:", consultations.content);
+        
+          const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
+           // console.log("Consulta patient.id:", consultation.patient?.id, "Filtro patientId:", this.patientId);
+            return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
+          });
+
+
+        
         let patientExams = [];
-        this.examService.getExam().subscribe((exams) => {
-          patientExams = exams.filter((exam: { patientId: string; }) => exam.patientId == this.patientId);
+         this.examService.getExam().subscribe((exams) => {
+        //   console.log("Id vindo", this.patientId );
+           console.log("exames do bd", exams.content);
+        //   patientExams = exams.content.filter((exams: { patient: { id: string } }) => exams.patient.id == this.patientId);
+       const patientExams = exams.content.filter((exam: { paciente: { id: string } }) => {
+          console.log("Exam patient.id:", exam.paciente.id, "Filtro patientId:", this.patientId);
+      
+          // Verifica se exam.patient e exam.patient.id estão definidos antes de comparar
+          return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
+        });
+
+
           this.patientEvents = patientConsultations.concat(patientExams);
           this.patientEvents.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
         });
