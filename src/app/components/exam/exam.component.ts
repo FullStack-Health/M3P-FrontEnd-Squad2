@@ -154,13 +154,13 @@ export class ExamComponent {
     if (this.examInfo.valid) {
       const editedExam = {
         "patientId": this.selectedPatientId,
-        "name": this.examInfo.value.name,
-        "date": this.examInfo.value.date,
-        "time": this.examInfo.value.time,
-        "type": this.examInfo.value.type,
-        "laboratory": this.examInfo.value.laboratory,
+        "nome": this.examInfo.value.name,
+        "dataEame": this.examInfo.value.date,
+        "horaExame": this.examInfo.value.time,
+        "tipo": this.examInfo.value.type,
+        "laboratorio": this.examInfo.value.laboratory,
         "documentUrl": this.examInfo.value.documentUrl,
-        "results": this.examInfo.value.results,
+        "resultados": this.examInfo.value.results,
       }
       this.examService.editExam(this.examToEdit.id, editedExam).subscribe({
         next: (response): void => {
