@@ -16,10 +16,9 @@ export class AgePipe implements PipeTransform {
   }
 
   private convertToDate(birthdateStr: string): Date {
-    const day = parseInt(birthdateStr.substring(0, 2), 10);
-    const month = parseInt(birthdateStr.substring(2, 4), 10) - 1;
-    const year = parseInt(birthdateStr.substring(4, 8), 10);
-    return new Date(year, month, day);
+    const [datePart] = birthdateStr.split(" "); 
+    const [year, month, day] = datePart.split("-").map(part => parseInt(part, 10)); 
+    return new Date(year, month - 1, day);
   };
   
   private calculateAge(birthdate: Date): number {
