@@ -95,7 +95,12 @@ export class LoginComponent {
         this.setTokenUser(token);
         this.userService.me().then((user) => {
           this.setLoggedUser(user);
-          this.router.navigate(["home"]);
+
+          if (user.perfil === 'PACIENTE') { this.router.navigate(["medical-records",`${user.paciente.id}`]); } 
+          else { this.router.navigate(["home"]); }
+
+
+
           this.toastrService.success("Login efetuado com sucesso!", '');
         });
       }).catch((err) => {
