@@ -69,22 +69,23 @@ export class ExamComponent {
 
   getExam(examId: string) {
     this.examService.getExam().subscribe((exams) => {
-      this.examToEdit = exams.find((exam: { id: string; }) => exam.id == examId);
+      console.log('Exames retornados:', exams);
+      console.log('ID do exame a ser editado:', examId);
+
+      this.examToEdit = exams.content.find((exam: { id: number; }) => exam.id === Number(examId));
       this.examInfo.patchValue({
-        name: this.examToEdit.name,
-        date: this.examToEdit.date,
-        time: this.examToEdit.time,
-        type: this.examToEdit.type,
-        laboratory: this.examToEdit.laboratory,
-        documentUrl: this.examToEdit.documentUrl,
-        results: this.examToEdit.results,
+        name: this.examToEdit.nome,
+        date: this.examToEdit.dataExame,
+        time: this.examToEdit.horaExame,
+        type: this.examToEdit.tipo,
+        laboratory: this.examToEdit.laboratorio,
+        documentUrl: this.examToEdit.url,
+        results: this.examToEdit.resultados,
         });
-      this.selectedPatientId = this.examToEdit.patientId;
-      this.patientService.getPatient().subscribe((patients) => {
-        let patient
-        patient = patients.find((patient: { id: string; }) => patient.id == this.selectedPatientId);
-        this.selectedPatientName = patient.name;
-      })
+      this.selectedPatientId = this.examToEdit.paciente?.id;
+      console.log('ID do paciente selecionado:', this.selectedPatientId);
+      this.selectedPatientName = this.examToEdit.paciente?.name;
+   
     });
   };
 
@@ -128,7 +129,7 @@ export class ExamComponent {
           "horaExame": this.examInfo.value.time,
           "tipo": this.examInfo.value.type,
           "laboratorio": this.examInfo.value.laboratory,
-          "documentUrl": this.examInfo.value.documentUrl,
+          "url": this.examInfo.value.documentUrl,
           "resultados": this.examInfo.value.results,
         }
         this.examService.addExam(newExam).subscribe({
@@ -155,11 +156,11 @@ export class ExamComponent {
       const editedExam = {
         "patientId": this.selectedPatientId,
         "nome": this.examInfo.value.name,
-        "dataEame": this.examInfo.value.date,
+        "dataExame": this.examInfo.value.date,
         "horaExame": this.examInfo.value.time,
         "tipo": this.examInfo.value.type,
         "laboratorio": this.examInfo.value.laboratory,
-        "documentUrl": this.examInfo.value.documentUrl,
+        "url": this.examInfo.value.documentUrl,
         "resultados": this.examInfo.value.results,
       }
       this.examService.editExam(this.examToEdit.id, editedExam).subscribe({
