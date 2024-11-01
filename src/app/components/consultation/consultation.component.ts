@@ -143,7 +143,6 @@ export class ConsultationComponent {
 
   editConsultation() {
       if (this.consultationInfo.valid) {
-        console.log(this.consultationToEdit);
         const editedConsultation = {
           "patientId": this.selectedPatientId,
           "reason": this.consultationInfo.value.reason,
