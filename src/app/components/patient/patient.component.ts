@@ -246,9 +246,10 @@ export class PatientComponent {
       this.patientService.editPatient(this.patientToEdit.id, editedPatient).subscribe({
         next: (response): void => {
           this.toastrService.success('Registro de paciente atualizado com sucesso!', '');
+          this.location.back();
         },
         error: (error) => {
-          this.toastrService.error('Algo deu errado ao tentar editar este registro.', error.error);
+          this.toastrService.error('Não foi possível editar este registro.', error.error);
         }
       });
     } else {
