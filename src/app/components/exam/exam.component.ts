@@ -155,7 +155,7 @@ export class ExamComponent {
       const editedExam = {
         "patientId": this.selectedPatientId,
         "nome": this.examInfo.value.name,
-        "dataEame": this.examInfo.value.date,
+        "dataExame": this.examInfo.value.date,
         "horaExame": this.examInfo.value.time,
         "tipo": this.examInfo.value.type,
         "laboratorio": this.examInfo.value.laboratory,
