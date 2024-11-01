@@ -22,7 +22,7 @@ export const routes: Routes = [
     {
         path: "home",
         component: HomeComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "login",
@@ -32,7 +32,7 @@ export const routes: Routes = [
     {
         path: "register-patient",
         component: PatientComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "register-consultation",
@@ -42,14 +42,16 @@ export const routes: Routes = [
     {
         path: "register-exam",
         component: ExamComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "medical-records",
-        children: [
-            { path: "",component: RecordsComponent },
-            { path: ":id", component: RecordsDetailComponent },
-        ],
+        component: RecordsComponent,
+        canActivate: [authGuard, perfilGuard],
+    },
+    {
+        path: "medical-records/:id",
+        component: RecordsDetailComponent,
         canActivate: [authGuard],
     },
     {
@@ -58,7 +60,7 @@ export const routes: Routes = [
             { path: "",component: PatientComponent },
             { path: ":id", component: PatientComponent },
         ],
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "edit-consultation",
@@ -66,7 +68,7 @@ export const routes: Routes = [
             { path: "",component: ConsultationComponent },
             { path: ":id", component: ConsultationComponent },
         ],
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "edit-exam",
@@ -74,7 +76,7 @@ export const routes: Routes = [
             { path: "",component: ExamComponent },
             { path: ":id", component: ExamComponent },
         ],
-        canActivate: [authGuard],
+        canActivate: [authGuard, perfilGuard],
     },
     {
         path: "users-list",
