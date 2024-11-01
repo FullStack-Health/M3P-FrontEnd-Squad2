@@ -70,7 +70,6 @@ export class ConsultationComponent {
   getConsultation(consultationId: string) {
     this.consultationService.getConsultation().subscribe((consultations) => {
       this.consultationToEdit = consultations.content.find((consultation: { id: string; }) => consultation.id == consultationId);
-      console.log(consultationId);
       this.consultationInfo.patchValue({
         reason: this.consultationToEdit.reason,
         date: this.consultationToEdit.date,
@@ -79,12 +78,8 @@ export class ConsultationComponent {
         prescribedMedication: this.consultationToEdit.prescribedMedication,
         observation: this.consultationToEdit.observation,
         });
-      this.selectedPatientId = this.consultationToEdit.patientId;
-      this.patientService.getPatient().subscribe((patients) => {
-        let patient;
-        patient = patients.find((patient: { id: string; }) => patient.id == this.selectedPatientId);
-        this.selectedPatientName = patient.name;
-      })
+      this.selectedPatientId = this.consultationToEdit.patient?.id;
+      this.selectedPatientName = this.consultationToEdit.patient?.name;
     });
   };
 
@@ -135,7 +130,7 @@ export class ConsultationComponent {
             this.toastrService.success('Nova consulta salva com sucesso!', '');
           },
           error: (error) => {
-            this.toastrService.error('Algo deu errado ao tentar salvar a nova consulta.', '');
+            this.toastrService.error('Não foi possível salvar a nova consulta.', error.error);
           }
         });
       } else {
@@ -148,6 +143,7 @@ export class ConsultationComponent {
 
   editConsultation() {
       if (this.consultationInfo.valid) {
+        console.log(this.consultationToEdit);
         const editedConsultation = {
           "patientId": this.selectedPatientId,
           "reason": this.consultationInfo.value.reason,
@@ -163,7 +159,7 @@ export class ConsultationComponent {
             this.location.back();
           },
           error: (error) => {
-            this.toastrService.error('Algo deu errado ao tentar editar a consulta.', '');
+            this.toastrService.error('Não foi possível editar a consulta.', error.error);
           }
         });
       } else {
