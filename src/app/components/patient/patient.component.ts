@@ -246,10 +246,9 @@ export class PatientComponent {
       this.patientService.editPatient(this.patientToEdit.id, editedPatient).subscribe({
         next: (response): void => {
           this.toastrService.success('Registro de paciente atualizado com sucesso!', '');
-          this.location.back();
         },
         error: (error) => {
-          this.toastrService.error('Algo deu errado ao tentar editar este registro.', '');
+          this.toastrService.error('Algo deu errado ao tentar editar este registro.', error.error);
         }
       });
     } else {
@@ -268,7 +267,7 @@ deletePatient() {
             this.router.navigate(["home"]);
           },
           error: (error) => {
-            this.toastrService.error('Algo deu errado ao tentar apagar o registro.', '');
+            this.toastrService.error('Não foi possível apagar o registro.', error.error);
           }
         })
       } else {
