@@ -204,11 +204,14 @@ export class PatientComponent {
   };
 
   editPatient() {
-    if (this.patientInfo.valid) {
+    if (!this.patientInfo.valid) {
+      this.toastrService.warning("Preencha todos os campos obrigatórios corretamente");
+      return;
+    }
       const editedPatient = {
         "name": this.patientInfo.value.name,
         "gender": this.patientInfo.value.gender,
-        "birthDate": this.patientInfo.value.birthDate,
+        "birthDate": this.formatDateOut(this.patientInfo.value.birthDate || ''),
         "cpf": this.patientInfo.value.cpf,
         "rg": this.patientInfo.value.rg,
         "maritalStatus": this.patientInfo.value.maritalStatus,
@@ -220,7 +223,7 @@ export class PatientComponent {
         "specialCare": this.patientInfo.value.specialCare,
         "insuranceCompany": this.patientInfo.value.insuranceCompany,
         "insuranceNumber": this.patientInfo.value.insuranceNumber,
-        "insuranceExpiration": this.patientInfo.value.insuranceExpiration,
+        "insuranceExpiration": this.formatDateOut(this.patientInfo.value.insuranceExpiration || ''),
         "address": {
           "cep": this.patientInfo.value.cep,
           "cidade": this.patientInfo.value.addressCity,
@@ -241,9 +244,6 @@ export class PatientComponent {
           this.toastrService.error('Não foi possível editar este registro.', error.error);
         }
       });
-    } else {
-      this.toastrService.warning("Preencha todos os campos obrigatórios corretamente.");
-    }
   };
 
   deletePatient() {
