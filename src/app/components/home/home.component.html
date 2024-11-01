@@ -42,7 +42,8 @@
 
     <div *ngIf="resultsList" id="patient-results">
         <div *ngFor="let patient of resultsList">
-            <div class="patient-card">
+            
+            <div class="patient-card" (click)="redirectToDetail(patient.id)">
                 <div class="card-header">
                     <!-- <div id="patient-portrait"><img src="../../../../assets/images/portrait-patient.png"></div> -->
                     <div>
@@ -65,7 +66,7 @@
                 <div>
                     <label>Contato: </label>
                     <div>
-                        <span> {{patient.phone | phone}}</span>
+                        <span> {{patient.phone}}</span>
                         <span *ngIf="patient.email"> {{patient.email}}</span>
                     </div>
                 </div>

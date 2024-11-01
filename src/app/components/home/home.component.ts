@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
+
   constructor (
     private router: Router,
     private patientService: PatientService,
@@ -47,17 +48,18 @@ export class HomeComponent {
 
   ngOnInit() {
     this.patientService.getPatient().subscribe((patients) => {
-      this.patientsList = patients;
+      this.patientsList = patients.content;
+      console.log(this.patientsList);
       this.resultsList = this.patientsList;
       this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
       this.patientsAmount = this.patientsList.length;
     });
     this.examService.getExam().subscribe((exams) => {
-      let examsArray = exams;
+      let examsArray = exams.content;
       this.examsAmount = examsArray.length;
     });
     this.consultationService.getConsultation().subscribe((consultations) => {
-      let consultationsArray = consultations;
+      let consultationsArray = consultations.content;
       this.consultationsAmount = consultationsArray.length;
     });
   }
@@ -66,7 +68,7 @@ export class HomeComponent {
     const searchInput = this.patientSearch.value.searchInput?.trim();
     if (searchInput) {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
+        this.patientsList = patients.content;
         this.resultsList = this.patientsList.filter((searchedPatient: { name: string, phone: string, email: string, }) => {
           const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(searchInput.toLowerCase());
           const isPhoneMatch = searchedPatient.phone && searchedPatient.phone.includes(searchInput);
@@ -80,7 +82,7 @@ export class HomeComponent {
       });
     } else {
       this.patientService.getPatient().subscribe((patients) => {
-        this.patientsList = patients;
+        this.patientsList = patients.content;
         this.resultsList = this.patientsList;
         this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
       });
@@ -91,5 +93,9 @@ export class HomeComponent {
   editPatient(id: string) {
     this.router.navigate(["edit-patient", id]);
   }
+
+  redirectToDetail(patientId: string) {
+    this.router.navigate(["medical-records", patientId]);
+    }
 
 }
