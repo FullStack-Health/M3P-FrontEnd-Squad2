@@ -69,7 +69,8 @@ export class ConsultationComponent {
 
   getConsultation(consultationId: string) {
     this.consultationService.getConsultation().subscribe((consultations) => {
-      this.consultationToEdit = consultations.find((consultation: { id: string; }) => consultation.id == consultationId);
+      this.consultationToEdit = consultations.content.find((consultation: { id: string; }) => consultation.id == consultationId);
+      console.log(consultationId);
       this.consultationInfo.patchValue({
         reason: this.consultationToEdit.reason,
         date: this.consultationToEdit.date,
