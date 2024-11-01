@@ -284,10 +284,15 @@ deletePatient() {
     return new Promise((resolve, reject) => {
     let patientConsultations: any[] = [];
       this.consultationService.getConsultation().subscribe((consultations) => {
-        patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => consultation.patient == this.patientToEdit.Id);
+          const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
+          return consultation.patient && consultation.patient.id == this.patientToEdit.id;});
+        
         let patientExams  = [];
         this.examService.getExam().subscribe((exams) => {
-          patientExams = exams.content.filter((exam: { patient: { id: string } }) => exam.patient == this.patientToEdit.id);
+          console.log("chamada do service com exames: ", exams);
+          patientExams = exams.content.filter((exam: { paciente: { id: string } }) => exam.paciente.id == this.patientToEdit.id);
+          
+         
           this.patientEvents = patientConsultations.concat(patientExams);
           if (this.patientEvents.length > 0) {
             resolve(false);
