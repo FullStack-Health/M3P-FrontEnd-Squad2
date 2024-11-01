@@ -6,8 +6,9 @@ import { BirthDatePipe } from '../../pipes/birth-date.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { ConsultationService } from '../../services/consultation.service';
 import { ExamService } from '../../services/exam.service';
+import { UserService } from '../../services/user.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faStethoscope, faMicroscope, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope, faMicroscope, faPeopleGroup, faUsersGear } from '@fortawesome/free-solid-svg-icons';
 import { AgePipe } from '../../pipes/age.pipe';
 import { PhonePipe } from '../../pipes/phone.pipe';
 import { Router } from '@angular/router';
@@ -28,6 +29,7 @@ export class HomeComponent {
     private toastrService: ToastrService,
     private examService: ExamService,
     private consultationService: ConsultationService,
+    private userService: UserService,
   ) {
   }
 
@@ -41,15 +43,25 @@ export class HomeComponent {
   patientsAmount: number = 0;
   examsAmount: number = 0;
   consultationsAmount: number = 0;
+  usersAmount: number = 0;
+
+  userAdmin: boolean = false;
 
   faStethoscope = faStethoscope;
   faMicroscope = faMicroscope;
   faPeopleGroup = faPeopleGroup;
+  faUsersGear = faUsersGear;
 
   ngOnInit() {
+    const user = localStorage.getItem("loggedUser");
+    if (user) {
+        const parsedUser = JSON.parse(user);
+        const perfil = parsedUser.perfil;
+        this.userAdmin = perfil === "ADMIN";
+    };  
+
     this.patientService.getPatient().subscribe((patients) => {
       this.patientsList = patients.content;
-      console.log(this.patientsList);
       this.resultsList = this.patientsList;
       this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
       this.patientsAmount = this.patientsList.length;
@@ -62,6 +74,12 @@ export class HomeComponent {
       let consultationsArray = consultations.content;
       this.consultationsAmount = consultationsArray.length;
     });
+    if (this.userAdmin) {
+      this.userService.getUsers().subscribe((users) => {
+        let usersArray = users.content;
+        this.usersAmount = usersArray.length
+      });
+    }
   }
 
   searchPatient() {

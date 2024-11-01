@@ -28,7 +28,15 @@
                 <div>exames</div>
             </div>
         </div>
-
+        <div *ngIf="userAdmin" class="stats-unit">
+            <div class="stats-icon">
+                <fa-icon [icon]="faUsersGear"></fa-icon>
+            </div>
+            <div class="stats-text">
+                <div class="stats-number">{{usersAmount}}</div>
+                <div>pessoas usuárias</div>
+            </div>
+        </div>
     </div>
     <div id="patient-search-container">
         <div id="patient-search">
