@@ -11,17 +11,19 @@ import { ExamService } from '../../services/exam.service';
 import { ConsultationService } from '../../services/consultation.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleChevronLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { DateFormatOutPipe } from '../../pipes/date-format-out.pipe';
 
 @Component({
   selector: 'app-patient',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective, NgxMaskPipe, FontAwesomeModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective, NgxMaskPipe, FontAwesomeModule, DateFormatOutPipe],
+  providers: [DateFormatOutPipe],
   templateUrl: './patient.component.html',
   styleUrl: './patient.component.scss'
 })
 export class PatientComponent {
 
-  constructor (
+  constructor(
     private addressService: AddressService,
     private patientService: PatientService,
     private toastrService: ToastrService,
@@ -31,12 +33,15 @@ export class PatientComponent {
     private confirmDialogService: ConfirmDialogService,
     private examService: ExamService,
     private consultationService: ConsultationService,
-  ) {};
+    private dateFormatOut: DateFormatOutPipe,
+  ) { };
 
   editingMode: boolean = false;
   patientToEdit: any = {};
   address: any | undefined;
   datePattern = /^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{4}$/;
+  faCircleChevronLeft = faCircleChevronLeft;
+  faPenToSquare = faPenToSquare;
 
   patientInfo = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
@@ -49,7 +54,7 @@ export class PatientComponent {
     email: new FormControl('', [Validators.email, Validators.required]),
     birthCity: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]),
     emergencyContact: new FormControl('', [Validators.required]),
-    allergies: new FormControl('' , [Validators.required]),
+    allergies: new FormControl('', [Validators.required]),
     specialCare: new FormControl(''),
     insuranceCompany: new FormControl(''),
     insuranceNumber: new FormControl(''),
@@ -63,9 +68,6 @@ export class PatientComponent {
     addressState: new FormControl('', [Validators.required]),
     addressLandmark: new FormControl(''),
   });
-
-  faCircleChevronLeft = faCircleChevronLeft;
-  faPenToSquare = faPenToSquare;
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((parameters) => {
@@ -82,20 +84,20 @@ export class PatientComponent {
 
   getPatient(patientId: string) {
 
-    const convertFromBd = (birthDate: string): string => { if (!birthDate) return ''; 
-    const parts = birthDate.split('T')[0].split('-'); 
-    return `${parts[2]}${parts[1]}${parts[0]}`;}
-    
+    const convertFromBd = (birthDate: string): string => {
+      if (!birthDate) return '';
+      const parts = birthDate.split('T')[0].split('-');
+      return `${parts[2]}${parts[1]}${parts[0]}`;
+    }
 
-
-    this.patientService.getPatient().subscribe((patients) => {
+    this.patientService.getPatient().subscribe({
+      next:(patients) => {
       this.patientToEdit = patients.content.find((patient: { id: string; }) => patient.id == patientId);
-    
+
       const formattedBirthDateFromBd = convertFromBd(this.patientToEdit.birthDate);
       const formattedInsuranceDateFromBd = convertFromBd(this.patientToEdit.insuranceExpiration);
-      
+
       this.patientInfo.patchValue({
-        
         name: this.patientToEdit.name,
         gender: this.patientToEdit.gender,
         birthDate: formattedBirthDateFromBd,
@@ -119,8 +121,12 @@ export class PatientComponent {
         addressCity: this.patientToEdit.address.cidade,
         addressState: this.patientToEdit.address.estado,
         addressLandmark: this.patientToEdit.address.pontoDeReferencia,
-        });
-      })
+      });
+    },
+    error: (error) => {
+      this.toastrService.error('Não foi possível carregar o registro de paciente com o id '+patientId, error.error);
+    }
+    });
   };
 
   searchAddress() {
@@ -129,17 +135,18 @@ export class PatientComponent {
         next: (response): void => {
           this.address = response;
           this.patientInfo.patchValue({
-          addressStreet: this.address.logradouro,
-          addressNeighborhood: this.address.bairro,
-          addressCity: this.address.localidade,
-          addressState: this.address.uf}
-        );
-        if (this.address.logradouro) {
-          this.toastrService.success('Dados de endereço encontrados.', '');
-        }
-        else {
-          this.toastrService.error('Informações de endereço não encontradas.', '');
-        };
+            addressStreet: this.address.logradouro,
+            addressNeighborhood: this.address.bairro,
+            addressCity: this.address.localidade,
+            addressState: this.address.uf
+          }
+          );
+          if (this.address.logradouro) {
+            this.toastrService.success('Dados de endereço encontrados.', '');
+          }
+          else {
+            this.toastrService.error('Informações de endereço não encontradas.', '');
+          };
         },
         error: (error) => {
           this.toastrService.error('CEP Inválido.', '');
@@ -148,71 +155,53 @@ export class PatientComponent {
     );
   };
 
-  savePatient(){
+  formatDateOut(date: string): string {
+    return date ? this.dateFormatOut.transform(date) : '';
+  }  
 
-    
-    const convertToYYYYMMDD = (date: string): string => { if (!date) return ''; 
-      const day = date.slice(0, 2); const month = date.slice(2, 4); 
-      const year = date.slice(4, 8); return `${year}-${month}-${day}`;}
-
-    if (this.patientInfo.valid) {
-      const birthDateInput: string | null | undefined = this.patientInfo.value.birthDate;
-      const insuranceExdate: string | null | undefined = this.patientInfo.value.insuranceExpiration;
-      if (birthDateInput && insuranceExdate ) {
-        
-        const birthDate = convertToYYYYMMDD(birthDateInput); 
-        const insuranceExpiration = convertToYYYYMMDD(insuranceExdate);
-
-        // const formattedInput = `${birthDateInput.slice(0, 2)}/${birthDateInput.slice(2, 4)}/${birthDateInput.slice(4, 8)}`;
-        // const birthDate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
-
-        //const insuranceExdate = `${birthDateInput.slice(4, 8)}-${birthDateInput.slice(2, 4)}-${birthDateInput.slice(0, 2)}`;
-        
-
-
-      const newPatient = {
-        "name": this.patientInfo.value.name,
-        "gender": this.patientInfo.value.gender,
-        "birthDate": birthDate,
-        "cpf": this.patientInfo.value.cpf,
-        "rg": this.patientInfo.value.rg,
-        "maritalStatus": this.patientInfo.value.maritalStatus,
-        "phone": this.patientInfo.value.phone,
-        "email": this.patientInfo.value.email,
-
-        "birthCity": this.patientInfo.value.birthCity,
-        "emergencyContact": this.patientInfo.value.emergencyContact,
-        "allergies": this.patientInfo.value.allergies,
-        "specialCare": this.patientInfo.value.specialCare,
-        "insuranceCompany": this.patientInfo.value.insuranceCompany,
-        "insuranceNumber": this.patientInfo.value.insuranceNumber,
-        "insuranceExpiration": insuranceExpiration,
-        "address": {
-          "cep": this.patientInfo.value.cep,
-          "cidade": this.patientInfo.value.addressCity,
-          "estado": this.patientInfo.value.addressState,
-          "logradouro": this.patientInfo.value.addressStreet,
-          "numero": this.patientInfo.value.addressNumber,
-          "complemento": this.patientInfo.value.addressComplement,
-          "bairro": this.patientInfo.value.addressNeighborhood,
-          "pontoDeReferencia": this.patientInfo.value.addressLandmark,
-        }
-      };
-      this.patientService.addPatient(newPatient).subscribe({
-        next: (response): void => {
-          this.patientInfo.reset();
-          this.toastrService.success('Novo registro de paciente salvo com sucesso!', '');
-        },
-        error: (error) => {
-          console.log(newPatient)
-          this.toastrService.error('Algo deu errado ao tentar salvar o registro de paciente.', '');
-        }
-    });
-    } else {
+  savePatient() {
+    if (!this.patientInfo.valid) {
       this.toastrService.warning("Preencha todos os campos obrigatórios corretamente");
+      return;
     }
-  }
-};
+    const newPatient = {
+      "name": this.patientInfo.value.name,
+      "gender": this.patientInfo.value.gender,
+      "birthDate": this.formatDateOut(this.patientInfo.value.birthDate || ''),
+      "cpf": this.patientInfo.value.cpf,
+      "rg": this.patientInfo.value.rg,
+      "maritalStatus": this.patientInfo.value.maritalStatus,
+      "phone": this.patientInfo.value.phone,
+      "email": this.patientInfo.value.email,
+
+      "birthCity": this.patientInfo.value.birthCity,
+      "emergencyContact": this.patientInfo.value.emergencyContact,
+      "allergies": this.patientInfo.value.allergies,
+      "specialCare": this.patientInfo.value.specialCare,
+      "insuranceCompany": this.patientInfo.value.insuranceCompany,
+      "insuranceNumber": this.patientInfo.value.insuranceNumber,
+      "insuranceExpiration": this.formatDateOut(this.patientInfo.value.insuranceExpiration || ''),
+      "address": {
+        "cep": this.patientInfo.value.cep,
+        "cidade": this.patientInfo.value.addressCity,
+        "estado": this.patientInfo.value.addressState,
+        "logradouro": this.patientInfo.value.addressStreet,
+        "numero": this.patientInfo.value.addressNumber,
+        "complemento": this.patientInfo.value.addressComplement,
+        "bairro": this.patientInfo.value.addressNeighborhood,
+        "pontoDeReferencia": this.patientInfo.value.addressLandmark,
+      }
+    };
+    this.patientService.addPatient(newPatient).subscribe({
+      next: (response): void => {
+        this.patientInfo.reset();
+        this.toastrService.success('Novo registro de paciente salvo com sucesso!', '');
+      },
+      error: (error) => {
+        this.toastrService.error('Não foi possível salvar o registro de paciente.', error.error);
+      }
+    });
+  };
 
   editPatient() {
     if (this.patientInfo.valid) {
@@ -255,48 +244,49 @@ export class PatientComponent {
     } else {
       this.toastrService.warning("Preencha todos os campos obrigatórios corretamente.");
     }
-};  
+  };
 
-deletePatient() {
-  this.confirmDialogService.confirm('Confirmar', 'Você deseja realmente apagar este registro de paciente? Esta ação é irreversível.', "Sim", "Cancelar")
-  .then(async (confirmed) => {
-    if (confirmed) {
-      if (await this.isDeletable(this.patientToEdit.id)) {
-        this.patientService.deletePatient(this.patientToEdit.id).subscribe({
-          next: (response): void => {
-            this.toastrService.success('Registro de paciente apagado com sucesso!', '');
-            this.router.navigate(["home"]);
-          },
-          error: (error) => {
-            this.toastrService.error('Não foi possível apagar o registro.', error.error);
+  deletePatient() {
+    this.confirmDialogService.confirm('Confirmar', 'Você deseja realmente apagar este registro de paciente? Esta ação é irreversível.', "Sim", "Cancelar")
+      .then(async (confirmed) => {
+        if (confirmed) {
+          if (await this.isDeletable(this.patientToEdit.id)) {
+            this.patientService.deletePatient(this.patientToEdit.id).subscribe({
+              next: (response): void => {
+                this.toastrService.success('Registro de paciente apagado com sucesso!', '');
+                this.router.navigate(["home"]);
+              },
+              error: (error) => {
+                this.toastrService.error('Não foi possível apagar o registro.', error.error);
+              }
+            })
+          } else {
+            this.toastrService.warning('Não é possível apagar um registro de paciente que esteja associado a exames ou consultas.', '');
           }
-        })
-      } else {
-        this.toastrService.warning('Não é possível apagar um registro de paciente que esteja associado a exames ou consultas.', '');
-      }}
-  })
-  .catch((error) => {});
-};
+        }
+      })
+      .catch((error) => { });
+  };
 
   patientEvents: any[] = [];
 
   isDeletable(id: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-    let patientConsultations: any[] = [];
+      let patientConsultations: any[] = [];
       this.consultationService.getConsultation().subscribe((consultations) => {
-          const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
-          return consultation.patient && consultation.patient.id == this.patientToEdit.id;});
-        
-        let patientExams  = [];
+        const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
+          return consultation.patient && consultation.patient.id == this.patientToEdit.id;
+        });
+
+        let patientExams = [];
         this.examService.getExam().subscribe((exams) => {
-          console.log("chamada do service com exames: ", exams);
           patientExams = exams.content.filter((exam: { paciente: { id: string } }) => exam.paciente.id == this.patientToEdit.id);
-          
-         
+
+
           this.patientEvents = patientConsultations.concat(patientExams);
           if (this.patientEvents.length > 0) {
             resolve(false);
-          } else { 
+          } else {
             resolve(true);
           };
         });
@@ -306,24 +296,26 @@ deletePatient() {
 
   goBack() {
     this.location.back();
-    };
+  };
 
-    onSpace(event: KeyboardEvent): void {
-      if (event.key === ' ') {
-        event.preventDefault();
-        const target = event.target as HTMLTextAreaElement;
-        const { selectionStart, selectionEnd, value } = target;
-        target.value = value.substring(0, selectionStart) + ', ' + value.substring(selectionEnd);
-        target.selectionStart = target.selectionEnd = selectionStart + 2;
-      }
+  onSpace(event: KeyboardEvent): void {
+    if (event.key === ' ') {
+      event.preventDefault();
+      const target = event.target as HTMLTextAreaElement;
+      const { selectionStart, selectionEnd, value } = target;
+      target.value = value.substring(0, selectionStart) + ', ' + value.substring(selectionEnd);
+      target.selectionStart = target.selectionEnd = selectionStart + 2;
+    }
+  }
+
+  convertDatefromBd() {
+    const convertFromBd = (birthDate: string): string => {
+      if (!birthDate) return '';
+      const parts = birthDate.split('T')[0].split('-');
+      return `${parts[2]}${parts[1]}${parts[0]}`;
     }
 
-    convertDatefromBd(){
-        const convertFromBd = (birthDate: string): string => { if (!birthDate) return ''; 
-        const parts = birthDate.split('T')[0].split('-'); 
-        return `${parts[2]}${parts[1]}${parts[0]}`;}
-
-    }
+  }
 
 
 }
