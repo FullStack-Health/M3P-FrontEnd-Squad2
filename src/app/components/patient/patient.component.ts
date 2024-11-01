@@ -249,7 +249,7 @@ export class PatientComponent {
           this.location.back();
         },
         error: (error) => {
-          this.toastrService.error('Algo deu errado ao tentar editar este registro.', '');
+          this.toastrService.error('Não foi possível editar este registro.', error.error);
         }
       });
     } else {
@@ -268,7 +268,7 @@ deletePatient() {
             this.router.navigate(["home"]);
           },
           error: (error) => {
-            this.toastrService.error('Algo deu errado ao tentar apagar o registro.', '');
+            this.toastrService.error('Não foi possível apagar o registro.', error.error);
           }
         })
       } else {
@@ -284,10 +284,15 @@ deletePatient() {
     return new Promise((resolve, reject) => {
     let patientConsultations: any[] = [];
       this.consultationService.getConsultation().subscribe((consultations) => {
-        patientConsultations = consultations.filter((consultation: { patientId: string; }) => consultation.patientId == this.patientToEdit.Id);
+          const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
+          return consultation.patient && consultation.patient.id == this.patientToEdit.id;});
+        
         let patientExams  = [];
         this.examService.getExam().subscribe((exams) => {
-          patientExams = exams.filter((exam: { patientId: string; }) => exam.patientId == this.patientToEdit.id);
+          console.log("chamada do service com exames: ", exams);
+          patientExams = exams.content.filter((exam: { paciente: { id: string } }) => exam.paciente.id == this.patientToEdit.id);
+          
+         
           this.patientEvents = patientConsultations.concat(patientExams);
           if (this.patientEvents.length > 0) {
             resolve(false);
