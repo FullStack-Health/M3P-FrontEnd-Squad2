@@ -45,15 +45,23 @@ export class HomeComponent {
   consultationsAmount: number = 0;
   usersAmount: number = 0;
 
+  userAdmin: boolean = false;
+
   faStethoscope = faStethoscope;
   faMicroscope = faMicroscope;
   faPeopleGroup = faPeopleGroup;
   faUsersGear = faUsersGear;
 
   ngOnInit() {
+    const user = localStorage.getItem("loggedUser");
+    if (user) {
+        const parsedUser = JSON.parse(user);
+        const perfil = parsedUser.perfil;
+        this.userAdmin = perfil === "ADMIN";
+    };  
+
     this.patientService.getPatient().subscribe((patients) => {
       this.patientsList = patients.content;
-      console.log(this.patientsList);
       this.resultsList = this.patientsList;
       this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
       this.patientsAmount = this.patientsList.length;
@@ -66,10 +74,12 @@ export class HomeComponent {
       let consultationsArray = consultations.content;
       this.consultationsAmount = consultationsArray.length;
     });
-    this.userService.getUsers().subscribe((users) => {
-      let usersArray = users.content;
-      this.usersAmount = usersArray.length;
-    });
+    if (this.userAdmin) {
+      this.userService.getUsers().subscribe((users) => {
+        let usersArray = users.content;
+        this.usersAmount = usersArray.length
+      });
+    }
   }
 
   searchPatient() {
