@@ -22,7 +22,12 @@ export class ToolbarComponent implements OnInit {
     const loggedUserStorage = localStorage.getItem("loggedUser");
     if (loggedUserStorage) {
       this.loggedUser = JSON.parse(loggedUserStorage);
-      this.loggedUserName = this.loggedUser.nome;
+      if(this.loggedUser.nome){
+        this.loggedUserName = this.loggedUser.nome;
+      } else {
+        this.loggedUserName = this.loggedUser.username;
+      }
+      
     };
   }
 
