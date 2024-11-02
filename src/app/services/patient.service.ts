@@ -14,10 +14,16 @@ export class PatientService {
 
 
   // getPatientPronturario() {
-  //   let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   return this.httpClient.get<any>(`${this.base}/prontuarios`, { headers: headers });
+  //   let headers = new HttpHeaders({ patientId});
+  //   return this.httpClient.get<any>(`${this.base}/${patientId}`, { headers: headers });
   // };
-  
+
+  getPatientPronturario(patientId : any) {
+    let headers = new HttpHeaders({'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.base}/${patientId}`, { headers: headers });
+  };
+
+   
   getPatient() {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.get<any>(`${this.base}`, { headers: headers }); //tirei o /pronturarios pois pra essa requiscao os dados de exame/consulta/usuario nao sao relevantes

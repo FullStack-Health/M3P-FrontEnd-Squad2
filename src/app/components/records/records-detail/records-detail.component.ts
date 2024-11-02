@@ -41,9 +41,16 @@ export class RecordsDetailComponent {
     this.activatedRoute.params.subscribe((parameters) => {
       this.patientId = parameters['id'];
       console.log("id do paciente vindo da lista: ",this.patientId);
-      this.patientService.getPatient().subscribe((patients) => {
-        this.patient = patients.content.find((patient: { id: string; }) => patient.id == this.patientId);
+
+      this.patientService.getPatientPronturario(this.patientId).subscribe((patient) => {
+        
+        this.patient = patient;
       });
+    
+
+      // this.patientService.getPatient().subscribe((patients) => {
+      //   this.patient = patients.content.find((patient: { id: string; }) => patient.id == this.patientId);
+      // });
        let patientConsultations: any[] = [];
       // this.consultationService.getConsultation().subscribe((consultations) => {
       //   patientConsultations = consultations.content.filter((consultation: { patientId: string; }) => consultation.patientId === this.patient.id);
