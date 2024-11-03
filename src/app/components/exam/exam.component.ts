@@ -69,9 +69,6 @@ export class ExamComponent {
 
   getExam(examId: string) {
     this.examService.getExam().subscribe((exams) => {
-      console.log('Exames retornados:', exams);
-      console.log('ID do exame a ser editado:', examId);
-
       this.examToEdit = exams.content.find((exam: { id: number; }) => exam.id === Number(examId));
       this.examInfo.patchValue({
         name: this.examToEdit.nome,
@@ -83,7 +80,6 @@ export class ExamComponent {
         results: this.examToEdit.resultados,
         });
       this.selectedPatientId = this.examToEdit.paciente?.id;
-      console.log('ID do paciente selecionado:', this.selectedPatientId);
       this.selectedPatientName = this.examToEdit.paciente?.name;
    
     });
