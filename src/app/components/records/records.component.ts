@@ -33,11 +33,9 @@ export class RecordsComponent {
 
   ngOnInit () {
     this.patientService.getListaPronturario().subscribe((patients) => {
-      console.log("lista: " , patients)
     this.patientsList = patients.content;
     this.resultsList = this.patientsList;
     this.resultsList.sort((a: any,b: any) => a.paciente.name.localeCompare(b.paciente.name));
-    console.log(this.resultsList);
     })
   };
 
