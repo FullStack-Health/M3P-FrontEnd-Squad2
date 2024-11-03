@@ -7,7 +7,7 @@
         <div id="patient-data-body">
             <div id="patient-data-first-line">
             <div id="patient-name">{{patient?.name}}</div>
-            <div class="event-button"><button (click)="editPatient(patient.id)">Atualizar cadastro</button></div>
+            <div *ngIf="!userPatient" class="event-button"><button (click)="editPatient(patient.id)">Atualizar cadastro</button></div>
             </div>
             <h4 *ngIf="patient.insuranceCompany">Convênio</h4>
             <h4 *ngIf="!patient.insuranceCompany">Convênio</h4>
@@ -70,7 +70,7 @@
                     <p>{{event.dosagePrecautions}}</p>
                 </div>
                 <div class="event-button">
-                    <button (click)="editConsultation(event.id)">Editar</button>
+                    <button *ngIf="!userPatient" (click)="editConsultation(event.id)">Editar</button>
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
                     <p>{{event.resultados}}</p>
                 </div>
                 <div class="event-button">
-                    <button (click)="editExam(event.id)">Editar</button>
+                    <button *ngIf="!userPatient" (click)="editExam(event.id)">Editar</button>
                 </div>
             </div>
         </div>
