@@ -241,8 +241,11 @@ export class PatientComponent {
           this.location.back();
         },
         error: (error) => {
-          this.toastrService.error('Não foi possível editar este registro.', error.error);
-        }
+          if (error.status === 403 ) 
+            { this.toastrService.error('O email informado já está em uso. Por favor, use um email diferente.', ''); } 
+          else { this.toastrService.error('Não foi possível editar este registro.', error.error); } }
+       
+        
       });
   };
 
