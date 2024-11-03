@@ -29,7 +29,7 @@
                 <div class="strip-unit">
                 <div class="strip-label">Convênio:</div>
                 <div>{{patients.paciente.insuranceCompany}}
-                <span *ngIf="!patients.insuranceCompany">Não possui convênio.</span></div>
+                <span *ngIf="!patients.paciente.insuranceCompany">Não possui convênio.</span></div>
                 </div>
                 </div>
                 <div id="edit-patientDetail" class="edit-button"> <button (click)="redirectToPatient(patients.paciente.id)" class="primary-button" >Editar</button> </div>
