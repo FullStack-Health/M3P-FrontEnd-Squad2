@@ -30,6 +30,7 @@ export class RecordsDetailComponent {
   patientId: string = "";
   patient: any = {};
   patientEvents: any = [];
+  userPatient: boolean = false;
 
   faCalendarDay = faCalendarDay;
   faClock = faClock;
@@ -38,6 +39,8 @@ export class RecordsDetailComponent {
   faPaperclip = faPaperclip;
 
   ngOnInit() {
+    this.getLoggedUser()
+
     this.activatedRoute.params.subscribe((parameters) => {
       this.patientId = parameters['id'];
       console.log("id do paciente vindo da lista: ",this.patientId);
@@ -99,6 +102,15 @@ export class RecordsDetailComponent {
       });
     });
   };
+
+  getLoggedUser() {
+  const user = localStorage.getItem("loggedUser");
+    if (user) {
+        const parsedUser = JSON.parse(user);
+        const perfil = parsedUser.perfil;
+        this.userPatient = perfil === "PACIENTE";
+    };
+  }
 
   editConsultation(id: string) {
     this.router.navigate(["edit-consultation", id]);
