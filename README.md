@@ -54,7 +54,9 @@ json-server@1.0.0-alpha.23
 
 ## Processo de Desenvolvimento
 
-Este projeto foi desenvolvido usando um quadro Kanban no Trello para gestão de tarefas e o GitHub para versionamento de código.
+Este projeto foi desenvolvido usando um board Kanban no Trello para gestão de tarefas e o GitHub para versionamento de código.
+
+[Trello do projeto](https://trello.com/b/czCf0Lak/m3p-frontend-squad-2)
 
 ## Conexão com API
 
