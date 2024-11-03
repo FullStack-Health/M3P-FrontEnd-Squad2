@@ -10,7 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCalendarDay, faClock, faStethoscope, faMicroscope, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { DateFormatInPipe } from '../../../pipes/date-format-in.pipe';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
+import { forkJoin, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-records-detail',
@@ -53,8 +53,18 @@ ngOnInit() {
         this.patient = patient;
 
         forkJoin({
-          consultations: this.consultationService.getConsultation(),
-          exams: this.examService.getExam()
+          consultations: this.consultationService.getConsultation().pipe(
+            catchError(error => {
+              this.toastrService.info('Nenhuma consulta carregada.', error.error);
+              return of({ content: [] }); 
+            })
+          ),
+          exams: this.examService.getExam().pipe(
+            catchError(error => {
+              this.toastrService.info('Nenhum exame carregado.', error.error);
+              return of({ content: [] }); 
+            })
+          )
         }).subscribe({
           next: ({ consultations, exams }) => {
             const patientConsultations = consultations.content ? consultations.content.filter((consultation: { patient: { id: string } }) => {
