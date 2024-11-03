@@ -10,6 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCalendarDay, faClock, faStethoscope, faMicroscope, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { DateFormatInPipe } from '../../../pipes/date-format-in.pipe';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-records-detail',
@@ -29,6 +30,8 @@ export class RecordsDetailComponent {
     private toastrService: ToastrService,
   ) { }
 
+  forkJoin: any = forkJoin;
+
   patientId: string = "";
   patient: any = {};
   patientEvents: any = [];
@@ -40,45 +43,40 @@ export class RecordsDetailComponent {
   faMicroscope = faMicroscope;
   faPaperclip = faPaperclip;
 
-  ngOnInit() {
-    this.getLoggedUser();
+ngOnInit() {
+  this.getLoggedUser();
 
-    let patientConsultations: any[] = [];
-    let patientExams: any[] = [];
+  this.activatedRoute.params.subscribe((parameters) => {
+    this.patientId = parameters['id'];
+    this.patientService.getPatientPronturario(this.patientId).subscribe({
+      next: (patient) => {
+        this.patient = patient;
 
-    this.activatedRoute.params.subscribe((parameters) => {
-      this.patientId = parameters['id'];
-      this.patientService.getPatientPronturario(this.patientId).subscribe({
-        next: (patient) => {
-          this.patient = patient;
+        forkJoin({
+          consultations: this.consultationService.getConsultation(),
+          exams: this.examService.getExam()
+        }).subscribe({
+          next: ({ consultations, exams }) => {
+            const patientConsultations = consultations.content ? consultations.content.filter((consultation: { patient: { id: string } }) => {
+              return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
+            }) : [];
 
-          this.consultationService.getConsultation().subscribe({
-            next: (consultations) => {
-              patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
-                return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
-              });
+            const patientExams = exams.content ? exams.content.filter((exam: { paciente: { id: string } }) => {
+              return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
+            }) : [];
 
-              this.examService.getExam().subscribe({
-                next: (exams) => {
-                  patientExams = exams.content.filter((exam: { paciente: { id: string } }) => {
-                    return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
-                  });
+            patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime());
 
-                  patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-                  patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime());
-
-                  this.patientEvents = [...patientConsultations, ...patientExams];
-                },
-                error: (error) => this.toastrService.error('Não foi possível carregar exames:', error.error)
-              });
-            },
-            error: (error) => this.toastrService.error('Não foi possível carregar consultas:', error.error)
-          });
-        },
-        error: (error) => this.toastrService.error('Não foi possível carregar paciente:', error.error)
-      });
+            this.patientEvents = [...patientConsultations, ...patientExams];
+          },
+          error: (error) => this.toastrService.error('Não foi possível carregar exames ou consultas:', error.error)
+        });
+      },
+      error: (error) => this.toastrService.error('Não foi possível carregar paciente:', error.error)
     });
-  };
+  });
+};
 
   getLoggedUser() {
     const user = localStorage.getItem("loggedUser");
