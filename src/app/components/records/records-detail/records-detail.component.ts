@@ -45,9 +45,14 @@ export class RecordsDetailComponent {
       this.patientId = parameters['id'];
       console.log("id do paciente vindo da lista: ",this.patientId);
 
-      this.patientService.getPatientPronturario(this.patientId).subscribe((patient) => {
+      this.patientService.getPatienteIdProntuario(this.patientId).subscribe((patient) => {
         
         this.patient = patient;
+        console.log("objeto paciente/pronturario: ", patient);
+
+        //const ConsultasPaciente = patient.
+
+
       });
     
 

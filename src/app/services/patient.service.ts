@@ -23,6 +23,11 @@ export class PatientService {
     return this.httpClient.get<any>(`${this.base}/${patientId}`, { headers: headers });
   };
 
+  getPatienteIdProntuario(patientId : any) { //pacientes/{id}/prontuarios
+    let headers = new HttpHeaders({'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.base}/${patientId}/prontuarios`, { headers: headers });
+  };
+
    
   getPatient() {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
