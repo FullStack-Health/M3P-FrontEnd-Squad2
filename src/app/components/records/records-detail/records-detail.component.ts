@@ -55,13 +55,11 @@ ngOnInit() {
         forkJoin({
           consultations: this.consultationService.getConsultation().pipe(
             catchError(error => {
-              this.toastrService.info('Nenhuma consulta carregada.', error.error);
               return of({ content: [] }); 
             })
           ),
           exams: this.examService.getExam().pipe(
             catchError(error => {
-              this.toastrService.info('Nenhum exame carregado.', error.error);
               return of({ content: [] }); 
             })
           )
