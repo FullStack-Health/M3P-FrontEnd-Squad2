@@ -111,17 +111,11 @@ export class LoginComponent {
     };
   };
 
-  checkEmail(email: string) {
-    let users = this.getStorage();
-    return users.find((user: { email: string | null | undefined; }) => user.email == email);
-  };
-
   setTokenUser(token: string) {
     localStorage.setItem("access_token", token);
   };
 
   setLoggedUser(user: any) {
-    // let loggedUser = this.checkEmail(email);
     localStorage.setItem("loggedUser", JSON.stringify(user));
   };
 
@@ -161,17 +155,6 @@ export class LoginComponent {
     });
   };
 
-  getStorage() {
-    const emptyDatabase: string[] = [];
-    const users = localStorage.getItem("users");
-    if (!!users) {
-      return JSON.parse(users);
-    } else {
-      localStorage.setItem("users", JSON.stringify(emptyDatabase));
-      return [];
-    };
-  };
-
   redefinePassword() {
     if (!this.forgotPasswordInfo.value.userEmail || !this.forgotPasswordInfo.value.newPassword || !this.forgotPasswordInfo.value.confirmNewPassword) {
       this.showSignupAlert("Preencha todos os campos.", "warning");
@@ -197,7 +180,6 @@ export class LoginComponent {
         this.forgotPasswordInfo.reset();
         this.closeModal("Submit click");
       },
-      //TO DO: (Depende do back-end, endpoint PUT /usuarios/email/{email}/redefinir-senha) Garantir que a mensagem abaixo está específica e amigável à pessoa usuária.
       error: (error) => {
         this.toastrService.error(error.error, '');
       }
