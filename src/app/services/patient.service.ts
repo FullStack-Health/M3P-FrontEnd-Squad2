@@ -11,21 +11,28 @@ export class PatientService {
   constructor(private httpClient: HttpClient) { }
 
   base: string = url + '/pacientes';
+  prontuarios: string = '/prontuarios';
 
 
-  // getPatientPronturario() {
-  //   let headers = new HttpHeaders({ patientId});
-  //   return this.httpClient.get<any>(`${this.base}/${patientId}`, { headers: headers });
-  // };
+  getPatientPronturarioIndividual(patientId : any) { //pacientes/id/prontuarios
+    let headers = new HttpHeaders({'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.base}/${patientId}/${this.prontuarios}`, { headers: headers });
+  };
 
-  getPatientPronturario(patientId : any) {
+
+  getPatientPronturario(patientId : any) { //pacientes/id
     let headers = new HttpHeaders({'Content-Type': 'application/json' });
     return this.httpClient.get<any>(`${this.base}/${patientId}`, { headers: headers });
   };
 
+  getListaPronturario() {  //pacientes/pronturarios
+    let headers = new HttpHeaders({'Content-Type': 'application/json' });
+    return this.httpClient.get<any>(`${this.base}${this.prontuarios}`, { headers: headers });
+  };
+
    
   getPatient() {
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' }); // Lista de pacientes
     return this.httpClient.get<any>(`${this.base}`, { headers: headers }); //tirei o /pronturarios pois pra essa requiscao os dados de exame/consulta/usuario nao sao relevantes
   };
 

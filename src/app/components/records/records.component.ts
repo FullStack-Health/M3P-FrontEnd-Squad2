@@ -32,11 +32,11 @@ export class RecordsComponent {
   selectedPatientId: string = "";
 
   ngOnInit () {
-    this.patientService.getPatient().subscribe((patients) => {
-      console.log(patients)
+    this.patientService.getListaPronturario().subscribe((patients) => {
+      console.log("lista: " , patients)
     this.patientsList = patients.content;
     this.resultsList = this.patientsList;
-    this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
+    this.resultsList.sort((a: any,b: any) => a.paciente.nome.localeCompare(b.paciente.nome));
     console.log(this.resultsList);
     })
   };
@@ -44,23 +44,23 @@ export class RecordsComponent {
   searchPatient() {
     const nameOrId = this.patientInput.value.nameOrId?.trim();
     if (nameOrId) {
-      this.patientService.getPatient().subscribe((patients) => {
+      this.patientService.getListaPronturario().subscribe((patients) => {
         this.patientsList = patients.content;
-        this.resultsList = this.patientsList.filter((searchedPatient: { name: string, id: string }) => {
-          const isNameMatch = searchedPatient.name && searchedPatient.name.toLowerCase().includes(nameOrId.toLowerCase());
-          const isIdMatch = searchedPatient.id && searchedPatient.id.toString().includes(nameOrId);
+        this.resultsList = this.patientsList.filter((searchedPatient: { paciente: { name: string, id: string } }) => {
+          const isNameMatch = searchedPatient.paciente.name && searchedPatient.paciente.name.toLowerCase().includes(nameOrId.toLowerCase());
+          const isIdMatch = searchedPatient.paciente.id && searchedPatient.paciente.id.toString().includes(nameOrId);
           return isNameMatch || isIdMatch;
         });
-        this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
+        this.resultsList.sort((a: any,b: any) => a.paciente.name.localeCompare(b.paciente.name));
         if (this.resultsList.length === 0) {
           this.toastrService.error("Não foram encontrados registros de paciente com este nome ou código de registro.");
         }
       });
     } else {
-      this.patientService.getPatient().subscribe((patients) => {
+      this.patientService.getListaPronturario().subscribe((patients) => {
         this.patientsList = patients.content;
         this.resultsList = this.patientsList;
-        this.resultsList.sort((a: any,b: any) => a.name.localeCompare(b.name));
+        this.resultsList.sort((a: any,b: any) => a.paciente.name.localeCompare(b.paciente.name));
       });
       this.toastrService.info("A lista de pacientes foi recarregada.");
     }
