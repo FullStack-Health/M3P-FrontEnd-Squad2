@@ -36,7 +36,7 @@ export class RecordsComponent {
       console.log("lista: " , patients)
     this.patientsList = patients.content;
     this.resultsList = this.patientsList;
-    this.resultsList.sort((a: any,b: any) => a.paciente.nome.localeCompare(b.paciente.nome));
+    this.resultsList.sort((a: any,b: any) => a.paciente.name.localeCompare(b.paciente.name));
     console.log(this.resultsList);
     })
   };
