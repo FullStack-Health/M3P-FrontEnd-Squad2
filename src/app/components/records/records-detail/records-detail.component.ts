@@ -31,6 +31,8 @@ export class RecordsDetailComponent {
   patient: any = {};
   patientEvents: any = [];
   userPatient: boolean = false;
+  ppatientConsultations: any[] = [];
+  ppatientExames: any[] = [];
 
   faCalendarDay = faCalendarDay;
   faClock = faClock;
@@ -48,9 +50,18 @@ export class RecordsDetailComponent {
       this.patientService.getPatienteIdProntuario(this.patientId).subscribe((patient) => {
         
         this.patient = patient;
-        console.log("objeto paciente/pronturario: ", patient);
 
-        //const ConsultasPaciente = patient.
+        console.log("objeto paciente/pronturario: ", patient);
+        
+        this.ppatientConsultations = patient.consultas;
+        console.log("Array consultas: ", patient.consultas);
+
+
+        this.ppatientExames = patient.exames;
+        console.log("Array Exames: ", patient.exames);
+
+        this.patientEvents = this.ppatientConsultations.concat(this.ppatientExames);
+
 
 
       });
@@ -67,30 +78,30 @@ export class RecordsDetailComponent {
       //   console.log("Consultas paciente", patientConsultations );
         
         
-        this.consultationService.getConsultation().subscribe((consultations) => {
-          console.log("Consultations antes do filtro:", consultations.content);
+        // this.consultationService.getConsultation().subscribe((consultations) => {
+        //   console.log("Consultations antes do filtro:", consultations.content);
         
-          const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
-           // console.log("Consulta patient.id:", consultation.patient?.id, "Filtro patientId:", this.patientId);
-            return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
-          });
+        //   const patientConsultations = consultations.content.filter((consultation: { patient: { id: string } }) => {
+        //    // console.log("Consulta patient.id:", consultation.patient?.id, "Filtro patientId:", this.patientId);
+        //     return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
+        //   });
 
 
         
-        let patientExams = [];
-         this.examService.getExam().subscribe((exams) => {
-        //   console.log("Id vindo", this.patientId );
-           console.log("exames do bd", exams.content);
-        //   patientExams = exams.content.filter((exams: { patient: { id: string } }) => exams.patient.id == this.patientId);
-       const patientExams = exams.content.filter((exam: { paciente: { id: string } }) => {
-          console.log("Exam patient.id:", exam.paciente.id, "Filtro patientId:", this.patientId);
+      //   let patientExams = [];
+      //    this.examService.getExam().subscribe((exams) => {
+      //   //   console.log("Id vindo", this.patientId );
+      //      console.log("exames do bd", exams.content);
+      //   //   patientExams = exams.content.filter((exams: { patient: { id: string } }) => exams.patient.id == this.patientId);
+      //  const patientExams = exams.content.filter((exam: { paciente: { id: string } }) => {
+      //     console.log("Exam patient.id:", exam.paciente.id, "Filtro patientId:", this.patientId);
       
-          // Verifica se exam.patient e exam.patient.id estão definidos antes de comparar
-          return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
-        });
+      //     // Verifica se exam.patient e exam.patient.id estão definidos antes de comparar
+      //     return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
+      //   });
 
 
-          this.patientEvents = patientConsultations.concat(patientExams);
+      //     this.patientEvents = patientConsultations.concat(patientExams);
           
           // this.patientEvents.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
           // this.patientEvents.sort((a: any, b: any) => { // Use a data correta para ordenar 
@@ -98,16 +109,16 @@ export class RecordsDetailComponent {
           //   const dateB = b.date ? new Date(b.date).getTime() : new Date(b.dataExame).getTime(); 
           //   return dateA - dateB; 
           // });
-          patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Ordenar exames cronologicamente 
-          patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime()); // Concatenar consultas ordenadas e exames ordenados 
-          this.patientEvents = [...patientConsultations, ...patientExams];
+          // patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Ordenar exames cronologicamente 
+          // patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime()); // Concatenar consultas ordenadas e exames ordenados 
+          // this.patientEvents = [...patientConsultations, ...patientExams];
 
 
         });
-      });
-    });
-  };
-
+  //     });
+  //   });
+  // };
+      }
   getLoggedUser() {
   const user = localStorage.getItem("loggedUser");
     if (user) {
