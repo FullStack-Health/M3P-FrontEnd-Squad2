@@ -1,0 +1,36 @@
+<div id="records-container">
+
+    <div id="patient-search">
+        <label for="patient-input">Busca de paciente (por nome ou código de registro):</label>
+        <form id="patient-search-form" (ngSubmit)="searchPatient()" [formGroup]="patientInput">
+        <input id="patient-input" type="text" formControlName="nameOrId">
+        <button type="submit" class="primary-button" title="Pesquisar">Pesquisar</button>
+        </form>
+    </div>
+
+    <div *ngIf="resultsList" id="patient-results">
+        <div *ngFor="let patients of resultsList">
+            <div class="patient-strip" (click)="redirectToDetail(patients.paciente.id)">
+                <div class="strip-main">
+                <h3 class="strip-name">{{patients.paciente.name}}</h3>
+                </div>
+                <div class="strip-secondary">
+                <div class="strip-unit">
+                <div class="strip-code">Registro {{patients.paciente.id}}</div>
+                </div>
+                <div class="strip-unit">
+                <div class="strip-label">Telefone:</div>
+                <div>{{patients.paciente.phone}}</div>
+                </div>
+                <div class="strip-unit">
+                <div class="strip-label">Convênio:</div>
+                <div>{{patients.paciente.insuranceCompany}}
+                <span *ngIf="!patients.paciente.insuranceCompany">Não possui convênio.</span></div>
+                </div>
+                </div>
+                <div id="edit-patientDetail" class="edit-button"> <button (click)="redirectToPatient(patients.paciente.id)" class="primary-button" >Editar</button> </div>
+            </div>
+        </div>
+    </div>
+
+</div>

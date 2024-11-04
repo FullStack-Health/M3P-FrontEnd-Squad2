@@ -1,0 +1,273 @@
+<div id="login-page">
+
+    <div id="login-container">
+        <div id="login-side-image">
+            <a href="https://www.freepik.com/free-photo/medium-shot-woman-working-as-doctor_41695723.htm">Imagem:
+                Freepik</a>
+        </div>
+
+        <div id="login-area">
+            <div class="login-header">
+                <img id="login-logo" src="../../../assets/images/logo-LABMedical.svg" alt="Marca do LABMedical"/>
+            </div>
+            <form id="login-form" (ngSubmit)="login()" [formGroup]="loginInfo">
+                <h1>Login</h1>
+                <div id="login-inputs">
+                    <label for="user-email">E-mail:</label>
+                    <input id="user-email" name="user-email" type="text" formControlName="userEmail" />
+                    <label for="user-password">Senha:</label>
+                    <input id="user-password" name="user-password" type="password" formControlName="userPassword" />
+                </div>
+                <div *ngIf="alertLoginVisibility">
+                <ngb-alert *ngIf="alertLoginVisibility" [animation]="true" [dismissible]="false" (close)="closeAlert()" type={{alertType}}>
+                    {{ alertMessage }}
+                </ngb-alert>
+                </div>
+                <a (click)="openModal(forgotPasswordModal)">Esqueceu a senha?</a>
+
+                <div class="login-button">
+                    <button type="submit">Entrar</button>
+                </div>
+
+            </form>
+            <div id="login-signup-link">
+                <p>Não possui uma conta?</p>
+                <a (click)="openModal(signUpModal)">Criar conta.</a>
+            </div>
+            <div id="login-footer">
+                <a href="https://lab365.tech"><img id="login-logo-qcode" src="../../../assets/images/logo-qcode.png" alt="Marca da squad 2: Qcode"/></a>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Signup Modal ("Criar conta"): -->
+<ng-template #signUpModal>
+    <form (ngSubmit)="signup()" [formGroup]="signupInfo">
+    <div class="modal-header">
+		<h4 class="modal-title">Criar conta</h4>
+		<button type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closeModal('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+            <label for="user-email">E-mail:</label>
+            <input
+            id="user-email"
+            name="user-email"
+            type="text"
+            formControlName="userEmail"
+            required
+            [ngClass]="{'error-border': (signupInfo.controls.userEmail.dirty ||
+        signupInfo.controls.userEmail.touched) &&
+        signupInfo.controls.userEmail.errors}"
+            />
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userEmail.dirty ||
+            signupInfo.controls.userEmail.touched) &&
+            signupInfo.controls.userEmail.errors &&
+            signupInfo.controls.userEmail.errors['required']"
+            >Preencha seu e-mail</span>
+
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userEmail.dirty &&
+            signupInfo.controls.userEmail.touched) &&
+            signupInfo.controls.userEmail.errors &&
+            signupInfo.controls.userEmail.errors['email']"
+            >Preencha um e-mail válido</span>
+
+            <label for="user-profile">Perfil:</label>
+            <select
+            id="user-profile"
+            name="user-profile"
+            formControlName="userProfile"
+            required
+            [ngClass]="{'error-border': (signupInfo.controls.userProfile.dirty ||
+        signupInfo.controls.userProfile.touched) &&
+        signupInfo.controls.userProfile.errors}"
+            >
+            <option value="ADMIN">Admin</option>
+            <option value="MEDICO">Pessoa médica</option>
+            </select>
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userProfile.dirty ||
+            signupInfo.controls.userProfile.touched) &&
+            signupInfo.controls.userProfile.errors &&
+            signupInfo.controls.userProfile.errors['required']"
+            >Selecione o perfil</span>
+
+            <label for="user-password">Senha:</label>
+            <input
+            id="user-password"
+            name="user-password"
+            type="password"
+            formControlName="userPassword"
+            required
+            [ngClass]="{'error-border': (signupInfo.controls.userPassword.dirty ||
+        signupInfo.controls.userPassword.touched) &&
+        signupInfo.controls.userPassword.errors}"
+            />
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userPassword.dirty ||
+            signupInfo.controls.userPassword.touched) &&
+            signupInfo.controls.userPassword.errors &&
+            signupInfo.controls.userPassword.errors['required']"
+            >Escolha uma senha</span>
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.userPassword.dirty &&
+            signupInfo.controls.userPassword.touched) &&
+            signupInfo.controls.userPassword.errors &&
+            signupInfo.controls.userPassword.errors['minlength']"
+            >Sua senha deve ter pelo menos 8 caracteres</span>
+
+            <label for="confirm-password">Confirmar senha:</label>
+            <input
+            id="confirm-password"
+            name="confirm-password"
+            type="password"
+            formControlName="confirmPassword"
+            required
+            [ngClass]="{'error-border': (signupInfo.controls.confirmPassword.dirty ||
+        signupInfo.controls.confirmPassword.touched) &&
+        signupInfo.controls.confirmPassword.errors}"
+            />
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.confirmPassword.dirty ||
+            signupInfo.controls.confirmPassword.touched) &&
+            signupInfo.controls.confirmPassword.errors &&
+            signupInfo.controls.confirmPassword.errors['required']"
+            >Confirme sua senha</span>
+            <span class="error-message"
+            *ngIf="(signupInfo.controls.confirmPassword.dirty &&
+            signupInfo.controls.confirmPassword.touched) &&
+            signupInfo.controls.confirmPassword.errors &&
+            signupInfo.controls.confirmPassword.errors['minlength']"
+            >Sua senha deve ter pelo menos 8 caracteres</span>   
+            
+            <div id="modal-alert">
+            <ngb-alert *ngIf="alertModalVisibility" [dismissible]="false" type={{alertType}}>
+                {{ alertMessage }}
+            </ngb-alert>
+            </div>
+	</div>
+	<div class="modal-footer">
+		<button
+        type="button"
+        class="btn btn-secondary"
+        (click)="closeModal('Close click')">Cancelar</button>
+        <button
+        type="submit"
+        class="btn btn-primary">Cadastrar</button>
+	</div>
+</form>
+</ng-template>
+
+<!-- ForgotPassword Modal ("Redefinir senha"): -->
+<ng-template #forgotPasswordModal>
+
+    <form (ngSubmit)="redefinePassword()" [formGroup]="forgotPasswordInfo">
+        <div class="modal-header">
+            <h4 class="modal-title">Redefinir senha</h4>
+            <button type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="closeModal('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+                <label for="forgot-password-email">E-mail:</label>
+                <input
+                id="forgot-password-email"
+                name="forgot-password-email"
+                type="text"
+                formControlName="userEmail"
+                required
+                [ngClass]="{'error-border': (forgotPasswordInfo.controls.userEmail.dirty ||
+            forgotPasswordInfo.controls.userEmail.touched) &&
+            forgotPasswordInfo.controls.userEmail.errors}"
+                />
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.userEmail.dirty ||
+                forgotPasswordInfo.controls.userEmail.touched) &&
+                forgotPasswordInfo.controls.userEmail.errors &&
+                forgotPasswordInfo.controls.userEmail.errors['required']"
+                >Preencha seu e-mail</span>
+    
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.userEmail.dirty &&
+                forgotPasswordInfo.controls.userEmail.touched) &&
+                forgotPasswordInfo.controls.userEmail.errors &&
+                forgotPasswordInfo.controls.userEmail.errors['email']"
+                >Preencha um e-mail válido</span>
+    
+                <label for="new-password">Nova senha:</label>
+                <input
+                id="new-password"
+                name="new-password"
+                type="password"
+                formControlName="newPassword"
+                required
+                [ngClass]="{'error-border': (forgotPasswordInfo.controls.newPassword.dirty ||
+            forgotPasswordInfo.controls.newPassword.touched) &&
+            forgotPasswordInfo.controls.newPassword.errors}"
+                />
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.newPassword.dirty ||
+                forgotPasswordInfo.controls.newPassword.touched) &&
+                forgotPasswordInfo.controls.newPassword.errors &&
+                forgotPasswordInfo.controls.newPassword.errors['required']"
+                >Escolha uma nova senha</span>
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.newPassword.dirty &&
+                forgotPasswordInfo.controls.newPassword.touched) &&
+                forgotPasswordInfo.controls.newPassword.errors &&
+                forgotPasswordInfo.controls.newPassword.errors['minlength']"
+                >Sua nova senha deve ter pelo menos 8 caracteres</span>
+    
+                <label for="confirm-password">Confirmar nova senha:</label>
+                <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                formControlName="confirmNewPassword"
+                required
+                [ngClass]="{'error-border': (forgotPasswordInfo.controls.confirmNewPassword.dirty ||
+            forgotPasswordInfo.controls.confirmNewPassword.touched) &&
+            forgotPasswordInfo.controls.confirmNewPassword.errors}"
+                />
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.confirmNewPassword.dirty ||
+                forgotPasswordInfo.controls.confirmNewPassword.touched) &&
+                forgotPasswordInfo.controls.confirmNewPassword.errors &&
+                forgotPasswordInfo.controls.confirmNewPassword.errors['required']"
+                >Confirme sua nova senha</span>
+                <span class="error-message"
+                *ngIf="(forgotPasswordInfo.controls.confirmNewPassword.dirty &&
+                forgotPasswordInfo.controls.confirmNewPassword.touched) &&
+                forgotPasswordInfo.controls.confirmNewPassword.errors &&
+                forgotPasswordInfo.controls.confirmNewPassword.errors['minlength']"
+                >Sua senha deve ter pelo menos 8 caracteres</span>   
+                
+                <div id="modal-alert">
+                <ngb-alert *ngIf="alertModalVisibility" [dismissible]="false" type={{alertType}}>
+                    {{ alertMessage }}
+                </ngb-alert>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal('Close click')">Cancelar</button>
+            <button
+            type="submit"
+            class="btn btn-primary">Redefinir</button>
+        </div>
+    </form>
+
+</ng-template>
+
