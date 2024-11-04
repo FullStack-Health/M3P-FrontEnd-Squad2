@@ -67,16 +67,21 @@ ngOnInit() {
           next: ({ consultations, exams }) => {
             const patientConsultations = consultations.content ? consultations.content.filter((consultation: { patient: { id: string } }) => {
               return consultation.patient && consultation.patient.id.toString() === this.patientId.toString();
+            }).map((consultation: any) => {
+              consultation.datetime = new Date(consultation.date + 'T' + consultation.time);
+              return consultation;
             }) : [];
 
             const patientExams = exams.content ? exams.content.filter((exam: { paciente: { id: string } }) => {
               return exam.paciente && exam.paciente.id.toString() === this.patientId.toString();
+            }).map((exam: any) => {
+              exam.datetime = new Date(exam.dataExame + 'T' + exam.horaExame);
+              return exam;
             }) : [];
 
-            patientConsultations.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            patientExams.sort((a: any, b: any) => new Date(b.dataExame).getTime() - new Date(a.dataExame).getTime());
-
             this.patientEvents = [...patientConsultations, ...patientExams];
+            this.patientEvents.sort((a: any, b: any) => b.datetime.getTime() - a.datetime.getTime());
+
           },
           error: (error) => this.toastrService.error('Não foi possível carregar exames ou consultas:', error.error)
         });
