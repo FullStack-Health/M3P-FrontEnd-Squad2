@@ -1,11 +1,16 @@
 # LABMedical
-## Equipe Qcode
+### Equipe Qcode
+
+### Deploy:
+[LABMedical by Qcode](http://labmedical.devplenio.com.br/)
+
+## Descrição:
 
 LABMedical é um sistema de gestão para instituições de saúde. Foi projetado para simplificar o processo de registro de pacientes e a gestão de exames e consultas em um ambiente hospitalar. Suas principais pessoas usuárias incluem profissionais de saúde, como pessoas da medicina, enfermagem e administração médica, além de pacientes, que terão acesso às suas informações médicas.
 
 Este projeto foi desenvolvido como parte do programa fullstack Floripa Mais Tec, pelo LAB365/SENAI (Florianópolis, Brasil).
 
-### Equipe:
+## Equipe:
 
 - [Felipe Quérette](https://www.linkedin.com/in/felipe-querette/) PO
 - [Pedro Xavier](https://www.linkedin.com/in/xavierpedroo/)
